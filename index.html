@@ -15,42 +15,54 @@
   <!-- Importa ethers.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.6.2/ethers.umd.min.js"></script>
   <script>
-    const provider = new ethers.JsonRpcProvider("26f37d1491f84a288a2f917ce277e3dc");
+    // Configura il provider Infura con l'API key corretta
+    const provider = new ethers.JsonRpcProvider(
+      "https://mainnet.infura.io/v3/26f37d1491f84a288a2f917ce277e3dc"
+    );
 
     async function getTokenInflow() {
-      const tokenAddress = document.getElementById("0x8c7ac134ed985367eadc6f727d79e8295e11435c").value;
+      // Prendi l'indirizzo del token dall'input
+      const tokenAddress = document.getElementById("tokenAddress").value;
       const output = document.getElementById("output");
 
+      // Controlla che l'indirizzo sia valido
       if (!ethers.isAddress(tokenAddress)) {
         output.textContent = "Errore: Indirizzo non valido.";
         return;
       }
 
+      // Calcola il timestamp di una settimana fa
       const oneWeekAgo = Math.floor(Date.now() / 1000) - 7 * 24 * 60 * 60;
 
       try {
+        // Recupera i log filtrati dal blocco degli ultimi 7 giorni
+        const latestBlock = await provider.getBlockNumber();
         const logs = await provider.getLogs({
           address: tokenAddress,
-          fromBlock: "earliest",
+          fromBlock: latestBlock - 50000, // Circa 7 giorni di blocchi (dipende dall'attività)
           toBlock: "latest"
         });
 
         let inflow = 0;
         let transactions = 0;
 
+        // Analizza ogni log
         for (let log of logs) {
           const block = await provider.getBlock(log.blockNumber);
 
+          // Filtra solo quelli degli ultimi 7 giorni
           if (block.timestamp >= oneWeekAgo) {
             const tx = await provider.getTransaction(log.transactionHash);
 
-            if (tx.to === tokenAddress) {
+            // Verifica che sia un inflow verso il token
+            if (tx.to && tx.to.toLowerCase() === tokenAddress.toLowerCase()) {
               inflow += parseFloat(ethers.formatUnits(tx.value, 18));
               transactions++;
             }
           }
         }
 
+        // Mostra il risultato
         output.textContent = `Totale inflow: ${inflow} tokens\nTransazioni: ${transactions}`;
       } catch (error) {
         output.textContent = `Errore: ${error.message}`;
@@ -59,4 +71,5 @@
   </script>
 </body>
 </html>
+
 
