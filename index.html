@@ -12,11 +12,11 @@
   <button onclick="getTokenInflow()">Analizza</button>
   <pre id="output"></pre>
 
-  <!-- Importa ethers.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.6.2/ethers.umd.min.js"></script>
+  <!-- Importa ethers.js versione 5.7.2 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
   <script>
-    // Configura il provider Infura con l'API key corretta
-    const provider = new ethers.JsonRpcProvider(
+    // Configura il provider Infura con la tua API key
+    const provider = new ethers.providers.JsonRpcProvider(
       "https://mainnet.infura.io/v3/26f37d1491f84a288a2f917ce277e3dc"
     );
 
@@ -26,7 +26,7 @@
       const output = document.getElementById("output");
 
       // Controlla che l'indirizzo sia valido
-      if (!ethers.isAddress(tokenAddress)) {
+      if (!ethers.utils.isAddress(tokenAddress)) {
         output.textContent = "Errore: Indirizzo non valido.";
         return;
       }
@@ -35,11 +35,13 @@
       const oneWeekAgo = Math.floor(Date.now() / 1000) - 7 * 24 * 60 * 60;
 
       try {
-        // Recupera i log filtrati dal blocco degli ultimi 7 giorni
+        // Recupera il numero dell'ultimo blocco
         const latestBlock = await provider.getBlockNumber();
+
+        // Recupera i log filtrati dagli ultimi 50000 blocchi (~7 giorni)
         const logs = await provider.getLogs({
           address: tokenAddress,
-          fromBlock: latestBlock - 50000, // Circa 7 giorni di blocchi (dipende dall'attività)
+          fromBlock: latestBlock - 50000, // Approx 7 giorni
           toBlock: "latest"
         });
 
@@ -50,20 +52,25 @@
         for (let log of logs) {
           const block = await provider.getBlock(log.blockNumber);
 
-          // Filtra solo quelli degli ultimi 7 giorni
+          // Filtra solo quelli negli ultimi 7 giorni
           if (block.timestamp >= oneWeekAgo) {
             const tx = await provider.getTransaction(log.transactionHash);
 
+            // Gestisce la firma evitando errori di yParity
+            const parsedTx = await provider.getTransaction(log.transactionHash, {
+              disableStrictSignatureChecks: true
+            });
+
             // Verifica che sia un inflow verso il token
-            if (tx.to && tx.to.toLowerCase() === tokenAddress.toLowerCase()) {
-              inflow += parseFloat(ethers.formatUnits(tx.value, 18));
+            if (parsedTx.to && parsedTx.to.toLowerCase() === tokenAddress.toLowerCase()) {
+              inflow += parseFloat(ethers.utils.formatUnits(parsedTx.value, 18));
               transactions++;
             }
           }
         }
 
         // Mostra il risultato
-        output.textContent = `Totale inflow: ${inflow} tokens\nTransazioni: ${transactions}`;
+        output.textContent = `Totale inflow: ${inflow.toFixed(4)} tokens\nTransazioni: ${transactions}`;
       } catch (error) {
         output.textContent = `Errore: ${error.message}`;
       }
