@@ -12,10 +12,9 @@
   <button onclick="getTokenInflow()">Analizza</button>
   <pre id="output"></pre>
 
-  <!-- Importa ethers.js versione 5.7.2 -->
+  <!-- ethers.js versione 5.7.2 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
   <script>
-    // Configura il provider con Infura
     const provider = new ethers.providers.JsonRpcProvider(
       "https://mainnet.infura.io/v3/26f37d1491f84a288a2f917ce277e3dc"
     );
@@ -30,31 +29,26 @@
         return;
       }
 
-      // Timestamp di una settimana fa
       const oneWeekAgo = Math.floor(Date.now() / 1000) - 7 * 24 * 60 * 60;
 
       try {
-        // Recupera il numero dell'ultimo blocco
         const latestBlock = await provider.getBlockNumber();
 
-        // Recupera i log filtrati dagli ultimi 50000 blocchi (~7 giorni)
         const logs = await provider.getLogs({
           address: tokenAddress,
-          fromBlock: latestBlock - 50000, // Approx 7 giorni
+          fromBlock: latestBlock - 50000,
           toBlock: "latest"
         });
 
         let inflow = 0;
         let transactions = 0;
 
-        // Analizza i log delle transazioni
         for (let log of logs) {
           const block = await provider.getBlock(log.blockNumber);
 
           if (block.timestamp >= oneWeekAgo) {
             const tx = await provider.getTransaction(log.transactionHash);
 
-            // Controllo indirizzo e valore
             if (tx.to && tx.to.toLowerCase() === tokenAddress.toLowerCase()) {
               inflow += parseFloat(ethers.utils.formatUnits(tx.value, 18));
               transactions++;
@@ -62,7 +56,6 @@
           }
         }
 
-        // Mostra il risultato
         output.textContent = `Totale inflow: ${inflow.toFixed(4)} tokens\nTransazioni: ${transactions}`;
       } catch (error) {
         output.textContent = `Errore: ${error.message}`;
