@@ -1,97 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ethereum Transaction Analyzer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f9;
-        }
-        #container {
-            max-width: 600px;
-            margin: auto;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .output {
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Token Inflow Analyzer</title>
 </head>
 <body>
-    <div id="container">
-        <h2>Ethereum Transaction Analyzer</h2>
-        <input type="text" id="transactionLink" placeholder="Paste Ethereum transaction link here">
-        <button onclick="analyzeTransaction()">Analyze</button>
-        <div class="output" id="output"></div>
-    </div>
-    <script>
-        async function analyzeTransaction() {
-            const etherscanApiKey = 'JFVSFTHMS8A8F8KIU1NY44HTDHBMDMYHG8'; // API Key fornita
-            const outputDiv = document.getElementById('output');
-            outputDiv.innerHTML = 'Fetching transaction details...';
+  <h1>Token Inflow Analyzer</h1>
+  <p>Inserisci l'indirizzo del token e clicca "Analizza".</p>
+  <input type="text" id="tokenAddress" placeholder="Token Address" />
+  <button onclick="getTokenInflow()">Analizza</button>
+  <pre id="output"></pre>
 
-            const input = document.getElementById('transactionLink').value;
-            const match = input.match(/https:\/\/etherscan\.io\/tx\/([a-fA-F0-9]+)/);
+  <!-- Importa ethers.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.6.2/ethers.umd.min.js"></script>
+  <script>
+    const provider = new ethers.JsonRpcProvider("26f37d1491f84a288a2f917ce277e3dc");
 
-            if (!match) {
-                outputDiv.innerHTML = 'Invalid link. Please enter a valid Etherscan transaction link.';
-                return;
+    async function getTokenInflow() {
+      const tokenAddress = document.getElementById("0x8c7ac134ed985367eadc6f727d79e8295e11435c").value;
+      const output = document.getElementById("output");
+
+      if (!ethers.isAddress(tokenAddress)) {
+        output.textContent = "Errore: Indirizzo non valido.";
+        return;
+      }
+
+      const oneWeekAgo = Math.floor(Date.now() / 1000) - 7 * 24 * 60 * 60;
+
+      try {
+        const logs = await provider.getLogs({
+          address: tokenAddress,
+          fromBlock: "earliest",
+          toBlock: "latest"
+        });
+
+        let inflow = 0;
+        let transactions = 0;
+
+        for (let log of logs) {
+          const block = await provider.getBlock(log.blockNumber);
+
+          if (block.timestamp >= oneWeekAgo) {
+            const tx = await provider.getTransaction(log.transactionHash);
+
+            if (tx.to === tokenAddress) {
+              inflow += parseFloat(ethers.formatUnits(tx.value, 18));
+              transactions++;
             }
-
-            const transactionHash = match[1];
-            const apiUrl = `https://api.etherscan.io/api?module=proxy&action=eth_getTransactionByHash&txhash=${transactionHash}&apikey=${etherscanApiKey}`;
-
-            try {
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-
-                if (data.result) {
-                    const details = `
-                        <p><strong>Transaction Hash:</strong> ${data.result.hash}</p>
-                        <p><strong>From:</strong> ${data.result.from}</p>
-                        <p><strong>To:</strong> ${data.result.to}</p>
-                        <p><strong>Value:</strong> ${parseInt(data.result.value, 16) / 1e18} ETH</p>
-                        <p><strong>Gas Price:</strong> ${parseInt(data.result.gasPrice, 16) / 1e9} Gwei</p>
-                    `;
-                    outputDiv.innerHTML = details;
-                } else {
-                    outputDiv.innerHTML = `
-                        <p><strong>Error:</strong> Could not retrieve transaction details.</p>
-                        <p><strong>Message:</strong> ${data.message || 'Unknown error'}</p>
-                    `;
-                }
-            } catch (error) {
-                outputDiv.innerHTML = `
-                    <p>An error occurred while fetching transaction details. Please try again later.</p>
-                    <p><strong>Error:</strong> ${error.message}</p>
-                `;
-                console.error(error);
-            }
+          }
         }
-    </script>
+
+        output.textContent = `Totale inflow: ${inflow} tokens\nTransazioni: ${transactions}`;
+      } catch (error) {
+        output.textContent = `Errore: ${error.message}`;
+      }
+    }
+  </script>
 </body>
 </html>
+
