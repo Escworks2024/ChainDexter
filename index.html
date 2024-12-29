@@ -4,17 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Token Inflow Analyzer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #loading {
+      display: none;
+      margin-top: 10px;
+      color: blue;
+    }
+  </style>
 </head>
 <body>
   <h1>Token Inflow Analyzer</h1>
   <p>Inserisci l'indirizzo del token e clicca "Analizza".</p>
   <input type="text" id="tokenAddress" placeholder="Token Address" />
   <button onclick="getTokenInflow()">Analizza</button>
+  <p id="loading">Analisi in corso... Attendere prego.</p>
   <pre id="output"></pre>
 
   <!-- ethers.js versione 5.7.2 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
   <script>
+    // Configura il provider con Infura
     const provider = new ethers.providers.JsonRpcProvider(
       "https://mainnet.infura.io/v3/26f37d1491f84a288a2f917ce277e3dc"
     );
@@ -22,10 +34,16 @@
     async function getTokenInflow() {
       const tokenAddress = document.getElementById("tokenAddress").value;
       const output = document.getElementById("output");
+      const loading = document.getElementById("loading");
+
+      // Resetta l'output e mostra la barra di caricamento
+      output.textContent = "";
+      loading.style.display = "block";
 
       // Controllo validità indirizzo
       if (!ethers.utils.isAddress(tokenAddress)) {
         output.textContent = "Errore: Indirizzo non valido.";
+        loading.style.display = "none";
         return;
       }
 
@@ -36,21 +54,22 @@
 
         const logs = await provider.getLogs({
           address: tokenAddress,
-          fromBlock: latestBlock - 50000,
+          fromBlock: latestBlock - 50000, // Analizza circa 7 giorni di blocchi
           toBlock: "latest"
         });
 
         let inflow = 0;
         let transactions = 0;
 
+        // Itera tra i log recuperati
         for (let log of logs) {
           const block = await provider.getBlock(log.blockNumber);
 
           if (block.timestamp >= oneWeekAgo) {
-            // Esegui una chiamata diretta RPC per evitare errori yParity
+            // Richiama direttamente il metodo eth_getTransactionByHash
             const tx = await provider.send("eth_getTransactionByHash", [log.transactionHash]);
 
-            // Verifica se la transazione è verso il token address
+            // Verifica se è un inflow
             if (tx.to && tx.to.toLowerCase() === tokenAddress.toLowerCase()) {
               inflow += parseFloat(ethers.utils.formatUnits(tx.value, 18));
               transactions++;
@@ -58,9 +77,13 @@
           }
         }
 
+        // Mostra il risultato
         output.textContent = `Totale inflow: ${inflow.toFixed(4)} tokens\nTransazioni: ${transactions}`;
       } catch (error) {
         output.textContent = `Errore: ${error.message}`;
+      } finally {
+        // Nasconde la barra di caricamento
+        loading.style.display = "none";
       }
     }
   </script>
