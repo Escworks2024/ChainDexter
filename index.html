@@ -47,8 +47,10 @@
           const block = await provider.getBlock(log.blockNumber);
 
           if (block.timestamp >= oneWeekAgo) {
-            const tx = await provider.getTransaction(log.transactionHash);
+            // Esegui una chiamata diretta RPC per evitare errori yParity
+            const tx = await provider.send("eth_getTransactionByHash", [log.transactionHash]);
 
+            // Verifica se la transazione è verso il token address
             if (tx.to && tx.to.toLowerCase() === tokenAddress.toLowerCase()) {
               inflow += parseFloat(ethers.utils.formatUnits(tx.value, 18));
               transactions++;
@@ -64,6 +66,3 @@
   </script>
 </body>
 </html>
-
-
-
