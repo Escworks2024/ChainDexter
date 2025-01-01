@@ -242,6 +242,24 @@
             height: 400px !important;
         }
 
+        /* Pulsante Reset Zoom */
+        #resetZoom {
+            margin-top: 10px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #fff;
+            background-color: #ef4444;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #resetZoom:hover {
+            background-color: #dc2626;
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -354,6 +372,7 @@
         <div id="results" class="fade-in"></div>
         <div id="chartContainer" class="fade-in">
             <canvas id="priceChart"></canvas>
+            <button id="resetZoom">Reset Zoom</button>
         </div>
     </div>
 
@@ -628,22 +647,18 @@
                             zoom: {
                                 wheel: {
                                     enabled: true,
-                                    speed: 0.1, // Riduci la sensibilità dello zoom
+                                    speed: 0.05, // Riduci ulteriormente la sensibilità dello zoom
                                     modifierKey: 'ctrl', // Richiede il tasto Ctrl per lo zoom con la rotella
                                 },
                                 pinch: {
                                     enabled: true,
                                 },
                                 mode: 'xy',
-                                limits: {
-                                    x: { min: 0, max: 100 }, // Limita il livello di zoom sull'asse X
-                                    y: { min: 0, max: 100 }, // Limita il livello di zoom sull'asse Y
-                                },
                             },
                             pan: {
                                 enabled: true,
                                 mode: 'xy',
-                                threshold: 10, // Distanza minima per attivare il pan
+                                threshold: 5, // Distanza minima per attivare il pan
                             },
                         },
                         annotation: {
@@ -691,6 +706,13 @@
                         mode: 'index',
                         intersect: false,
                     },
+                }
+            });
+
+            // Aggiungi il pulsante di reset zoom
+            document.getElementById('resetZoom').addEventListener('click', () => {
+                if (priceChart) {
+                    priceChart.resetZoom();
                 }
             });
         }
