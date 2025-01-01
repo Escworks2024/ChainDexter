@@ -493,6 +493,18 @@
                         await new Promise(resolve => setTimeout(resolve, 1000)); // Ritardo per evitare rate limiting
                     }
 
+                    // Aggiungi manualmente "The Balkan Dwarf"
+                    const balkanDwarf = {
+                        id: "the-balkan-dwarf",
+                        name: "The Balkan Dwarf",
+                        symbol: "KEK",
+                        image: "https://assets.coingecko.com/coins/images/36401/large/KEK.png?1696537358",
+                        current_price: 0.000000000000000001, // Prezzo fittizio
+                        market_cap: 0, // Market cap fittizio
+                        total_volume: 0, // Volume fittizio
+                    };
+                    allTokens.push(balkanDwarf);
+
                     localStorage.setItem('tokens', JSON.stringify(allTokens));
                     localStorage.setItem('tokensTimestamp', Date.now());
                 }
@@ -616,15 +628,22 @@
                             zoom: {
                                 wheel: {
                                     enabled: true,
+                                    speed: 0.1, // Riduci la sensibilità dello zoom
+                                    modifierKey: 'ctrl', // Richiede il tasto Ctrl per lo zoom con la rotella
                                 },
                                 pinch: {
                                     enabled: true,
                                 },
                                 mode: 'xy',
+                                limits: {
+                                    x: { min: 0, max: 100 }, // Limita il livello di zoom sull'asse X
+                                    y: { min: 0, max: 100 }, // Limita il livello di zoom sull'asse Y
+                                },
                             },
                             pan: {
                                 enabled: true,
                                 mode: 'xy',
+                                threshold: 10, // Distanza minima per attivare il pan
                             },
                         },
                         annotation: {
