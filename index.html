@@ -1,85 +1,270 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Token Inflow Analyzer</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-    #loading {
-      display: none;
-      margin-top: 10px;
-      color: blue;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisi Inflow e Outflow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        select, input[type="date"], input[type="text"] {
+            padding: 5px;
+            font-size: 16px;
+            width: 300px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #results {
+            margin-top: 20px;
+        }
+        .week {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #loading, #spinner {
+            display: none;
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+        }
+        #error {
+            display: none;
+            margin-top: 10px;
+            color: red;
+        }
+        #chartContainer {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+        @media (max-width: 600px) {
+            select, input[type="date"], input[type="text"] {
+                width: 100%;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <h1>Token Inflow Analyzer</h1>
-  <p>Inserisci l'indirizzo del token e clicca "Analizza".</p>
-  <input type="text" id="tokenAddress" placeholder="Token Address" />
-  <button onclick="getTokenInflow()">Analizza</button>
-  <p id="loading">Analisi in corso... Attendere prego.</p>
-  <pre id="output"></pre>
+    <h1>Analisi Inflow e Outflow</h1>
+    <p>
+        <strong>Inflow</strong>: Volume di scambi associato a un aumento di prezzo.<br>
+        <strong>Outflow</strong>: Volume di scambi associato a una diminuzione di prezzo.<br>
+        <strong>Netto</strong>: Differenza tra inflow e outflow.
+    </p>
 
-  <!-- ethers.js versione 5.7.2 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
-  <script>
-    const provider = new ethers.providers.JsonRpcProvider(
-      "https://mainnet.infura.io/v3/26f37d1491f84a288a2f917ce277e3dc",
-      { timeout: 10000 } // Timeout di 10 secondi
-    );
+    <label for="searchToken">Cerca criptovaluta:</label>
+    <input type="text" id="searchToken" placeholder="Scrivi per cercare...">
+    
+    <label for="tokenSelect">Seleziona una criptovaluta:</label>
+    <select id="tokenSelect">
+        <option value="" disabled selected>Caricamento in corso...</option>
+    </select>
+    <div id="loading">Caricamento delle criptovalute...</div>
+    <div id="error"></div>
 
-    async function getTokenInflow() {
-      const tokenAddress = document.getElementById("tokenAddress").value;
-      const output = document.getElementById("output");
-      const loading = document.getElementById("loading");
+    <label for="startDate">Seleziona la data di inizio:</label>
+    <input type="date" id="startDate" />
 
-      output.textContent = "";
-      loading.style.display = "block";
+    <label for="endDate">Seleziona la data di fine:</label>
+    <input type="date" id="endDate" />
 
-      if (!ethers.utils.isAddress(tokenAddress)) {
-        output.textContent = "Errore: Indirizzo non valido.";
-        loading.style.display = "none";
-        return;
-      }
+    <button onclick="fetchData()">Analizza</button>
 
-      const oneWeekAgo = Math.floor(Date.now() / 1000) - 7 * 24 * 60 * 60;
+    <div id="spinner">Analisi in corso...</div>
+    <div id="results"></div>
+    <div id="chartContainer">
+        <canvas id="priceChart"></canvas>
+    </div>
 
-      try {
-        const latestBlock = await provider.getBlockNumber();
+    <script>
+        const CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24 ore in millisecondi
+        let allTokens = []; // Memorizza i token caricati
+        let priceChart = null; // Memorizza l'istanza del grafico
 
-        // Riduzione del range a 5000 blocchi
-        const logs = await provider.getLogs({
-          address: tokenAddress,
-          fromBlock: latestBlock - 5000,
-          toBlock: "latest"
-        });
+        // Caricamento della lista delle criptovalute con cache
+        async function loadTokens() {
+            const tokenSelect = document.getElementById('tokenSelect');
+            const loadingDiv = document.getElementById('loading');
+            const errorDiv = document.getElementById('error');
+            tokenSelect.innerHTML = '<option value="" disabled selected>Caricamento in corso...</option>';
+            loadingDiv.style.display = 'block';
+            errorDiv.style.display = 'none';
 
-        let inflow = 0;
-        let transactions = 0;
+            try {
+                const cachedTokens = localStorage.getItem('tokens');
+                const cacheTimestamp = localStorage.getItem('tokensTimestamp');
 
-        for (let log of logs) {
-          const block = await provider.getBlock(log.blockNumber);
+                if (cachedTokens && cacheTimestamp && Date.now() - cacheTimestamp < CACHE_EXPIRATION) {
+                    allTokens = JSON.parse(cachedTokens);
+                } else {
+                    const perPage = 250;
+                    const totalPages = 8; // Carica 8 pagine (2000 criptovalute)
 
-          if (block.timestamp >= oneWeekAgo) {
-            const tx = await provider.send("eth_getTransactionByHash", [log.transactionHash]);
+                    for (let page = 1; page <= totalPages; page++) {
+                        const tokensUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${perPage}&page=${page}`;
+                        const response = await fetch(tokensUrl);
+                        if (!response.ok) throw new Error(`Errore nella pagina ${page}`);
+                        const tokens = await response.json();
+                        allTokens = allTokens.concat(tokens);
+                        await new Promise(resolve => setTimeout(resolve, 1000)); // Ritardo per evitare rate limiting
+                    }
 
-            if (tx.to && tx.to.toLowerCase() === tokenAddress.toLowerCase()) {
-              inflow += parseFloat(ethers.utils.formatUnits(tx.value, 18));
-              transactions++;
+                    localStorage.setItem('tokens', JSON.stringify(allTokens));
+                    localStorage.setItem('tokensTimestamp', Date.now());
+                }
+
+                populateDropdown(allTokens);
+            } catch (error) {
+                tokenSelect.innerHTML = '<option value="" disabled selected>Errore durante il caricamento</option>';
+                errorDiv.textContent = `Errore: ${error.message}`;
+                errorDiv.style.display = 'block';
+            } finally {
+                loadingDiv.style.display = 'none';
             }
-          }
         }
 
-        output.textContent = `Totale inflow: ${inflow.toFixed(4)} tokens\nTransazioni: ${transactions}`;
-      } catch (error) {
-        output.textContent = `Errore: ${error.message}`;
-      } finally {
-        loading.style.display = "none";
-      }
-    }
-  </script>
+        function populateDropdown(tokens) {
+            const tokenSelect = document.getElementById('tokenSelect');
+            tokenSelect.innerHTML = '<option value="" disabled selected>Seleziona una criptovaluta</option>';
+            tokens.forEach(token => {
+                const option = document.createElement('option');
+                option.value = token.id;
+                option.textContent = `${token.name} (${token.symbol.toUpperCase()})`;
+                tokenSelect.appendChild(option);
+            });
+        }
+
+        // Filtra le criptovalute
+        document.getElementById('searchToken').addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+            const filteredTokens = allTokens.filter(token => 
+                token.name.toLowerCase().includes(query) || 
+                token.symbol.toLowerCase().includes(query)
+            );
+            populateDropdown(filteredTokens);
+        });
+
+        async function fetchData() {
+            const tokenId = document.getElementById('tokenSelect').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const resultsDiv = document.getElementById('results');
+            const spinnerDiv = document.getElementById('spinner');
+
+            if (!tokenId || !startDate || !endDate) {
+                resultsDiv.innerHTML = "<p>Seleziona una criptovaluta e un intervallo di date valido.</p>";
+                return;
+            }
+
+            if (new Date(startDate) >= new Date(endDate)) {
+                resultsDiv.innerHTML = "<p>La data di inizio deve essere precedente alla data di fine.</p>";
+                return;
+            }
+
+            spinnerDiv.style.display = 'block';
+
+            try {
+                const startTimestamp = new Date(startDate).getTime() / 1000;
+                const endTimestamp = new Date(endDate).getTime() / 1000;
+                const url = `https://api.coingecko.com/api/v3/coins/${tokenId}/market_chart/range?vs_currency=usd&from=${startTimestamp}&to=${endTimestamp}`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Errore durante il recupero dei dati");
+
+                const data = await response.json();
+                const result = calculateFlows(data.prices, data.total_volumes);
+
+                resultsDiv.innerHTML = `
+                    <h2>Risultati:</h2>
+                    <div class="week">
+                        <strong>Inflow:</strong> ${formatCurrency(result.inflow)}<br>
+                        <strong>Outflow:</strong> ${formatCurrency(result.outflow)}<br>
+                        <strong>Netto:</strong> ${formatCurrency(result.netto)}
+                    </div>
+                `;
+
+                // Visualizza il grafico
+                renderChart(data.prices);
+            } catch (error) {
+                resultsDiv.innerHTML = `<p>Errore: ${error.message}</p>`;
+            } finally {
+                spinnerDiv.style.display = 'none';
+            }
+        }
+
+        function calculateFlows(prices, volumes) {
+            let inflow = 0, outflow = 0;
+            for (let i = 1; i < prices.length; i++) {
+                const volume = volumes[i][1];
+                if (prices[i][1] > prices[i - 1][1]) inflow += volume * prices[i][1];
+                else outflow += volume * prices[i][1];
+            }
+            return { inflow, outflow, netto: inflow - outflow };
+        }
+
+        function formatCurrency(value) {
+            return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        }
+
+        function renderChart(prices) {
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            const labels = prices.map(price => new Date(price[0]).toLocaleDateString());
+            const data = prices.map(price => price[1]);
+
+            if (priceChart) {
+                priceChart.destroy(); // Rimuove il grafico esistente
+            }
+
+            priceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Prezzo (USD)',
+                        data: data,
+                        borderColor: '#007bff',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Data'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Prezzo (USD)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        window.onload = loadTokens;
+    </script>
 </body>
 </html>
