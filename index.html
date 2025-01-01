@@ -494,12 +494,13 @@
             errorDiv.style.display = 'none';
 
             try {
-                const cachedTokens = localStorage.getItem('tokens');
-                const cacheTimestamp = localStorage.getItem('tokensTimestamp');
+                // Disabilitiamo la cache per forzare il ricaricamento dei token
+                // const cachedTokens = localStorage.getItem('tokens');
+                // const cacheTimestamp = localStorage.getItem('tokensTimestamp');
 
-                if (cachedTokens && cacheTimestamp && Date.now() - cacheTimestamp < CACHE_EXPIRATION) {
-                    allTokens = JSON.parse(cachedTokens);
-                } else {
+                // if (cachedTokens && cacheTimestamp && Date.now() - cacheTimestamp < CACHE_EXPIRATION) {
+                //     allTokens = JSON.parse(cachedTokens);
+                // } else {
                     const perPage = 250;
                     const totalPages = 4;
 
@@ -524,11 +525,12 @@
                     };
                     allTokens.push(balkanDwarf);
 
-                    localStorage.setItem('tokens', JSON.stringify(allTokens));
-                    localStorage.setItem('tokensTimestamp', Date.now());
-                }
+                    // localStorage.setItem('tokens', JSON.stringify(allTokens));
+                    // localStorage.setItem('tokensTimestamp', Date.now());
+                // }
 
                 populateDropdown(allTokens);
+                console.log(allTokens); // Stampa l'array per verifica
             } catch (error) {
                 tokenSelect.innerHTML = '<option value="" disabled selected>Error loading data</option>';
                 errorDiv.textContent = `Error: ${error.message}`;
