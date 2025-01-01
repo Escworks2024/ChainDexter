@@ -115,7 +115,7 @@
                     allTokens = JSON.parse(cachedTokens);
                 } else {
                     const perPage = 250;
-                    const totalPages = 8; // Carica 8 pagine (2000 criptovalute)
+                    const totalPages = 4;
 
                     for (let page = 1; page <= totalPages; page++) {
                         const tokensUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${perPage}&page=${page}`;
