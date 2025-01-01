@@ -270,8 +270,8 @@
         }
 
         footer img {
-            width: 24px;
-            height: 24px;
+            width: 48px;
+            height: 48px;
             vertical-align: middle;
             margin-right: 8px;
         }
@@ -302,6 +302,8 @@
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
 </head>
 <body>
     <div class="top-bar">
@@ -609,6 +611,43 @@
                 },
                 options: {
                     responsive: true,
+                    plugins: {
+                        zoom: {
+                            zoom: {
+                                wheel: {
+                                    enabled: true,
+                                },
+                                pinch: {
+                                    enabled: true,
+                                },
+                                mode: 'xy',
+                            },
+                            pan: {
+                                enabled: true,
+                                mode: 'xy',
+                            },
+                        },
+                        annotation: {
+                            annotations: {
+                                line1: {
+                                    type: 'line',
+                                    mode: 'horizontal',
+                                    scaleID: 'y',
+                                    value: calculateAverage(data),
+                                    borderColor: '#10b981',
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    label: {
+                                        content: 'Average Price',
+                                        enabled: true,
+                                        position: 'end',
+                                        backgroundColor: '#10b981',
+                                        color: '#fff',
+                                    },
+                                },
+                            },
+                        },
+                    },
                     scales: {
                         x: {
                             display: true,
@@ -624,9 +663,23 @@
                                 text: 'Price (USD)'
                             }
                         }
-                    }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        intersect: false,
+                    },
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false,
+                    },
                 }
             });
+        }
+
+        // Calcola la media dei prezzi
+        function calculateAverage(data) {
+            const sum = data.reduce((acc, val) => acc + val, 0);
+            return sum / data.length;
         }
 
         window.onload = () => {
