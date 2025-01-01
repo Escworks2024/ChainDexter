@@ -1,109 +1,474 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analisi Inflow e Outflow</title>
+    <title>Inflow and Outflow Analysis</title>
     <style>
+        /* Reset e stili di base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
+
+        body.dark-mode {
+            background-color: #1e293b;
+            color: #f8fafc;
+        }
+
         h1 {
-            color: #333;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-align: center;
         }
+
+        p {
+            font-size: 16px;
+            color: #64748b;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            flex: 1;
+        }
+
+        body.dark-mode .container {
+            background-color: #334155;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Menu in alto */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .language-select {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background-color: #fff;
+            color: #1e293b;
+            transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode .language-select {
+            background-color: #475569;
+            border-color: #64748b;
+            color: #f8fafc;
+        }
+
+        .dark-mode-button {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1e293b;
+            background-color: #e2e8f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body.dark-mode .dark-mode-button {
+            background-color: #475569;
+            color: #f8fafc;
+        }
+
+        /* Form e input */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
         label {
             display: block;
-            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #475569;
+            margin-bottom: 8px;
         }
+
+        body.dark-mode label {
+            color: #cbd5e1;
+        }
+
         select, input[type="date"], input[type="text"] {
-            padding: 5px;
-            font-size: 16px;
-            width: 300px;
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background-color: #fff;
+            color: #1e293b;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
+
+        body.dark-mode select, body.dark-mode input[type="date"], body.dark-mode input[type="text"] {
+            background-color: #475569;
+            border-color: #64748b;
+            color: #f8fafc;
+        }
+
+        select:focus, input[type="date"]:focus, input[type="text"]:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+
+        /* Bottone */
         button {
-            margin-top: 10px;
-            padding: 10px 20px;
+            width: 100%;
+            padding: 14px;
             font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Risultati */
         #results {
-            margin-top: 20px;
+            margin-top: 24px;
+            padding: 20px;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
         }
+
+        body.dark-mode #results {
+            background-color: #475569;
+            border-color: #64748b;
+        }
+
         .week {
-            margin-bottom: 10px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            margin-bottom: 16px;
+            padding: 16px;
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
+
+        body.dark-mode .week {
+            background-color: #334155;
+            border-color: #64748b;
+        }
+
+        .week strong {
+            color: #1e293b;
+        }
+
+        body.dark-mode .week strong {
+            color: #f8fafc;
+        }
+
+        /* Messaggi di caricamento e errore */
         #loading, #spinner {
             display: none;
-            margin-top: 10px;
-            font-style: italic;
-            color: #666;
+            font-size: 14px;
+            color: #64748b;
+            text-align: center;
+            margin-top: 16px;
         }
+
+        body.dark-mode #loading, body.dark-mode #spinner {
+            color: #cbd5e1;
+        }
+
         #error {
             display: none;
-            margin-top: 10px;
-            color: red;
+            font-size: 14px;
+            color: #ef4444;
+            text-align: center;
+            margin-top: 16px;
         }
+
+        /* Grafico */
         #chartContainer {
-            margin-top: 20px;
+            margin-top: 24px;
             width: 100%;
-            max-width: 800px;
+            background-color: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        @media (max-width: 600px) {
-            select, input[type="date"], input[type="text"] {
-                width: 100%;
+
+        body.dark-mode #chartContainer {
+            background-color: #334155;
+            border-color: #64748b;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: 400px !important;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #fff;
+            border-top: 1px solid #e2e8f0;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body.dark-mode footer {
+            background-color: #334155;
+            border-color: #64748b;
+        }
+
+        footer a {
+            display: inline-block;
+            text-decoration: none;
+            color: #3b82f6;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode footer a {
+            color: #60a5fa;
+        }
+
+        footer img {
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        /* Animazioni */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 16px;
             }
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1>Analisi Inflow e Outflow</h1>
-    <p>
-        <strong>Inflow</strong>: Volume di scambi associato a un aumento di prezzo.<br>
-        <strong>Outflow</strong>: Volume di scambi associato a una diminuzione di prezzo.<br>
-        <strong>Netto</strong>: Differenza tra inflow e outflow.
-    </p>
-
-    <label for="searchToken">Cerca criptovaluta:</label>
-    <input type="text" id="searchToken" placeholder="Scrivi per cercare...">
-    
-    <label for="tokenSelect">Seleziona una criptovaluta:</label>
-    <select id="tokenSelect">
-        <option value="" disabled selected>Caricamento in corso...</option>
-    </select>
-    <div id="loading">Caricamento delle criptovalute...</div>
-    <div id="error"></div>
-
-    <label for="startDate">Seleziona la data di inizio:</label>
-    <input type="date" id="startDate" />
-
-    <label for="endDate">Seleziona la data di fine:</label>
-    <input type="date" id="endDate" />
-
-    <button onclick="fetchData()">Analizza</button>
-
-    <div id="spinner">Analisi in corso...</div>
-    <div id="results"></div>
-    <div id="chartContainer">
-        <canvas id="priceChart"></canvas>
+    <div class="top-bar">
+        <select class="language-select" id="languageSelect">
+            <option value="en">English</option>
+            <option value="it">Italiano</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+        </select>
+        <button class="dark-mode-button" id="darkModeButton">Dark Mode</button>
     </div>
+
+    <div class="container">
+        <h1 id="title">Inflow and Outflow Analysis</h1>
+        <p id="description">
+            <strong>Inflow</strong>: Volume of trades associated with a price increase.<br>
+            <strong>Outflow</strong>: Volume of trades associated with a price decrease.<br>
+            <strong>Net</strong>: Difference between inflow and outflow.
+        </p>
+
+        <div class="form-group">
+            <label for="searchToken" id="searchLabel">Search cryptocurrency:</label>
+            <input type="text" id="searchToken" placeholder="Type to search...">
+        </div>
+        
+        <div class="form-group">
+            <label for="tokenSelect" id="selectLabel">Select a cryptocurrency:</label>
+            <select id="tokenSelect">
+                <option value="" disabled selected>Loading...</option>
+            </select>
+            <div id="loading">Loading cryptocurrencies...</div>
+            <div id="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="startDate" id="startDateLabel">Select start date:</label>
+            <input type="date" id="startDate" />
+        </div>
+
+        <div class="form-group">
+            <label for="endDate" id="endDateLabel">Select end date:</label>
+            <input type="date" id="endDate" />
+        </div>
+
+        <button onclick="fetchData()" id="analyzeButton">Analyze</button>
+
+        <div id="spinner">Analyzing...</div>
+        <div id="results" class="fade-in"></div>
+        <div id="chartContainer" class="fade-in">
+            <canvas id="priceChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <a href="https://your-sol-donation-address-here" target="_blank" rel="noopener noreferrer">
+            <img src="https://i.imgur.com/960npj0.png" alt="Donate SOL">
+            DONATE SOL
+        </a>
+    </footer>
 
     <script>
         const CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24 ore in millisecondi
         let allTokens = []; // Memorizza i token caricati
         let priceChart = null; // Memorizza l'istanza del grafico
 
+        // Traduzioni
+        const translations = {
+            en: {
+                title: "Inflow and Outflow Analysis",
+                description: "<strong>Inflow</strong>: Volume of trades associated with a price increase.<br><strong>Outflow</strong>: Volume of trades associated with a price decrease.<br><strong>Net</strong>: Difference between inflow and outflow.",
+                searchLabel: "Search cryptocurrency:",
+                selectLabel: "Select a cryptocurrency:",
+                startDateLabel: "Select start date:",
+                endDateLabel: "Select end date:",
+                analyzeButton: "Analyze",
+                loading: "Loading cryptocurrencies...",
+                spinner: "Analyzing...",
+                error: "Error:",
+                results: "Results:",
+                inflow: "Inflow:",
+                outflow: "Outflow:",
+                net: "Net:",
+            },
+            it: {
+                title: "Analisi Inflow e Outflow",
+                description: "<strong>Inflow</strong>: Volume di scambi associato a un aumento di prezzo.<br><strong>Outflow</strong>: Volume di scambi associato a una diminuzione di prezzo.<br><strong>Netto</strong>: Differenza tra inflow e outflow.",
+                searchLabel: "Cerca criptovaluta:",
+                selectLabel: "Seleziona una criptovaluta:",
+                startDateLabel: "Seleziona la data di inizio:",
+                endDateLabel: "Seleziona la data di fine:",
+                analyzeButton: "Analizza",
+                loading: "Caricamento delle criptovalute...",
+                spinner: "Analisi in corso...",
+                error: "Errore:",
+                results: "Risultati:",
+                inflow: "Inflow:",
+                outflow: "Outflow:",
+                net: "Netto:",
+            },
+            es: {
+                title: "Análisis de Inflow y Outflow",
+                description: "<strong>Inflow</strong>: Volumen de operaciones asociado a un aumento de precio.<br><strong>Outflow</strong>: Volumen de operaciones asociado a una disminución de precio.<br><strong>Neto</strong>: Diferencia entre inflow y outflow.",
+                searchLabel: "Buscar criptomoneda:",
+                selectLabel: "Selecciona una criptomoneda:",
+                startDateLabel: "Selecciona la fecha de inicio:",
+                endDateLabel: "Selecciona la fecha de fin:",
+                analyzeButton: "Analizar",
+                loading: "Cargando criptomonedas...",
+                spinner: "Analizando...",
+                error: "Error:",
+                results: "Resultados:",
+                inflow: "Inflow:",
+                outflow: "Outflow:",
+                net: "Neto:",
+            },
+            fr: {
+                title: "Analyse Inflow et Outflow",
+                description: "<strong>Inflow</strong>: Volume d'échanges associé à une augmentation de prix.<br><strong>Outflow</strong>: Volume d'échanges associé à une diminution de prix.<br><strong>Net</strong>: Différence entre inflow et outflow.",
+                searchLabel: "Rechercher une cryptomonnaie:",
+                selectLabel: "Sélectionnez une cryptomonnaie:",
+                startDateLabel: "Sélectionnez la date de début:",
+                endDateLabel: "Sélectionnez la date de fin:",
+                analyzeButton: "Analyser",
+                loading: "Chargement des cryptomonnaies...",
+                spinner: "Analyse en cours...",
+                error: "Erreur:",
+                results: "Résultats:",
+                inflow: "Inflow:",
+                outflow: "Outflow:",
+                net: "Net:",
+            },
+        };
+
+        // Imposta la lingua
+        function setLanguage(lang) {
+            const translation = translations[lang];
+            document.getElementById("title").innerHTML = translation.title;
+            document.getElementById("description").innerHTML = translation.description;
+            document.getElementById("searchLabel").innerText = translation.searchLabel;
+            document.getElementById("selectLabel").innerText = translation.selectLabel;
+            document.getElementById("startDateLabel").innerText = translation.startDateLabel;
+            document.getElementById("endDateLabel").innerText = translation.endDateLabel;
+            document.getElementById("analyzeButton").innerText = translation.analyzeButton;
+            document.getElementById("loading").innerText = translation.loading;
+            document.getElementById("spinner").innerText = translation.spinner;
+            document.getElementById("error").innerText = translation.error;
+        }
+
+        // Cambia lingua
+        document.getElementById("languageSelect").addEventListener("change", function () {
+            const lang = this.value;
+            setLanguage(lang);
+        });
+
+        // Modalità scura
+        document.getElementById("darkModeButton").addEventListener("click", function () {
+            document.body.classList.toggle("dark-mode");
+            this.innerText = document.body.classList.contains("dark-mode") ? "Light Mode" : "Dark Mode";
+        });
+
         // Caricamento della lista delle criptovalute con cache
         async function loadTokens() {
             const tokenSelect = document.getElementById('tokenSelect');
             const loadingDiv = document.getElementById('loading');
             const errorDiv = document.getElementById('error');
-            tokenSelect.innerHTML = '<option value="" disabled selected>Caricamento in corso...</option>';
+            tokenSelect.innerHTML = '<option value="" disabled selected>Loading...</option>';
             loadingDiv.style.display = 'block';
             errorDiv.style.display = 'none';
 
@@ -132,8 +497,8 @@
 
                 populateDropdown(allTokens);
             } catch (error) {
-                tokenSelect.innerHTML = '<option value="" disabled selected>Errore durante il caricamento</option>';
-                errorDiv.textContent = `Errore: ${error.message}`;
+                tokenSelect.innerHTML = '<option value="" disabled selected>Error loading data</option>';
+                errorDiv.textContent = `Error: ${error.message}`;
                 errorDiv.style.display = 'block';
             } finally {
                 loadingDiv.style.display = 'none';
@@ -142,7 +507,7 @@
 
         function populateDropdown(tokens) {
             const tokenSelect = document.getElementById('tokenSelect');
-            tokenSelect.innerHTML = '<option value="" disabled selected>Seleziona una criptovaluta</option>';
+            tokenSelect.innerHTML = '<option value="" disabled selected>Select a cryptocurrency</option>';
             tokens.forEach(token => {
                 const option = document.createElement('option');
                 option.value = token.id;
@@ -169,12 +534,12 @@
             const spinnerDiv = document.getElementById('spinner');
 
             if (!tokenId || !startDate || !endDate) {
-                resultsDiv.innerHTML = "<p>Seleziona una criptovaluta e un intervallo di date valido.</p>";
+                resultsDiv.innerHTML = "<p>Select a cryptocurrency and a valid date range.</p>";
                 return;
             }
 
             if (new Date(startDate) >= new Date(endDate)) {
-                resultsDiv.innerHTML = "<p>La data di inizio deve essere precedente alla data di fine.</p>";
+                resultsDiv.innerHTML = "<p>The start date must be before the end date.</p>";
                 return;
             }
 
@@ -185,24 +550,24 @@
                 const endTimestamp = new Date(endDate).getTime() / 1000;
                 const url = `https://api.coingecko.com/api/v3/coins/${tokenId}/market_chart/range?vs_currency=usd&from=${startTimestamp}&to=${endTimestamp}`;
                 const response = await fetch(url);
-                if (!response.ok) throw new Error("Errore durante il recupero dei dati");
+                if (!response.ok) throw new Error("Error fetching data");
 
                 const data = await response.json();
                 const result = calculateFlows(data.prices, data.total_volumes);
 
                 resultsDiv.innerHTML = `
-                    <h2>Risultati:</h2>
+                    <h2>Results:</h2>
                     <div class="week">
                         <strong>Inflow:</strong> ${formatCurrency(result.inflow)}<br>
                         <strong>Outflow:</strong> ${formatCurrency(result.outflow)}<br>
-                        <strong>Netto:</strong> ${formatCurrency(result.netto)}
+                        <strong>Net:</strong> ${formatCurrency(result.netto)}
                     </div>
                 `;
 
                 // Visualizza il grafico
                 renderChart(data.prices);
             } catch (error) {
-                resultsDiv.innerHTML = `<p>Errore: ${error.message}</p>`;
+                resultsDiv.innerHTML = `<p>Error: ${error.message}</p>`;
             } finally {
                 spinnerDiv.style.display = 'none';
             }
@@ -236,9 +601,9 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Prezzo (USD)',
+                        label: 'Price (USD)',
                         data: data,
-                        borderColor: '#007bff',
+                        borderColor: '#3b82f6',
                         fill: false
                     }]
                 },
@@ -249,14 +614,14 @@
                             display: true,
                             title: {
                                 display: true,
-                                text: 'Data'
+                                text: 'Date'
                             }
                         },
                         y: {
                             display: true,
                             title: {
                                 display: true,
-                                text: 'Prezzo (USD)'
+                                text: 'Price (USD)'
                             }
                         }
                     }
@@ -264,7 +629,10 @@
             });
         }
 
-        window.onload = loadTokens;
+        window.onload = () => {
+            loadTokens();
+            setLanguage("en"); // Imposta la lingua predefinita su inglese
+        };
     </script>
 </body>
 </html>
