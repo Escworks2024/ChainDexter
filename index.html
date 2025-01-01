@@ -568,63 +568,29 @@
             }
 
             spinnerDiv.style.display = 'block';
-            resultsDiv.innerHTML = ''; // Pulisci i risultati precedenti
 
             try {
-                const startTimestamp = Math.floor(new Date(startDate).getTime() / 1000);
-                const endTimestamp = Math.floor(new Date(endDate).getTime() / 1000);
-
-                // URL per i dati storici
+                const startTimestamp = new Date(startDate).getTime() / 1000;
+                const endTimestamp = new Date(endDate).getTime() / 1000;
                 const url = `https://api.coingecko.com/api/v3/coins/${tokenId}/market_chart/range?vs_currency=usd&from=${startTimestamp}&to=${endTimestamp}`;
-
-                // Effettua la richiesta
                 const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
+                if (!response.ok) throw new Error("Error fetching data");
 
-                // Calcola inflow, outflow e netto
+                const data = await response.json();
                 const result = calculateFlows(data.prices, data.total_volumes);
 
-                // Ottieni i dettagli aggiuntivi della criptovaluta
-                const detailsUrl = `https://api.coingecko.com/api/v3/coins/${tokenId}`;
-                const detailsResponse = await fetch(detailsUrl);
-                if (!detailsResponse.ok) {
-                    throw new Error(`HTTP error! Status: ${detailsResponse.status}`);
-                }
-                const details = await detailsResponse.json();
-
-                // Estrai ATH, ATL, supply e altri dettagli
-                const ath = details.market_data.ath.usd;
-                const athDate = new Date(details.market_data.ath_date.usd).toLocaleDateString();
-                const atl = details.market_data.atl.usd;
-                const atlDate = new Date(details.market_data.atl_date.usd).toLocaleDateString();
-                const currentPrice = details.market_data.current_price.usd;
-                const athDistance = ((currentPrice - ath) / ath * 100).toFixed(2);
-                const circulatingSupply = details.market_data.circulating_supply;
-                const totalSupply = details.market_data.total_supply;
-
-                // Mostra i risultati
                 resultsDiv.innerHTML = `
                     <h2>Results:</h2>
                     <div class="week">
                         <strong>Inflow:</strong> ${formatCurrency(result.inflow)}<br>
                         <strong>Outflow:</strong> ${formatCurrency(result.outflow)}<br>
-                        <strong>Net:</strong> ${formatCurrency(result.netto)}<br><br>
-                        <strong>Current Price:</strong> ${formatCurrency(currentPrice)}<br>
-                        <strong>ATH:</strong> ${formatCurrency(ath)} (${athDate})<br>
-                        <strong>ATL:</strong> ${formatCurrency(atl)} (${atlDate})<br>
-                        <strong>Distance from ATH:</strong> ${athDistance}%<br>
-                        <strong>Circulating Supply:</strong> ${circulatingSupply.toLocaleString()}<br>
-                        <strong>Total Supply:</strong> ${totalSupply ? totalSupply.toLocaleString() : "N/A"}
+                        <strong>Net:</strong> ${formatCurrency(result.netto)}
                     </div>
                 `;
 
                 // Visualizza il grafico
-                renderChart(data.prices, ath, atl);
+                renderChart(data.prices);
             } catch (error) {
-                console.error("Fetch error:", error);
                 resultsDiv.innerHTML = `<p>Error: ${error.message}</p>`;
             } finally {
                 spinnerDiv.style.display = 'none';
@@ -649,7 +615,7 @@
             }
         }
 
-        function renderChart(prices, ath, atl) {
+        function renderChart(prices) {
             const ctx = document.getElementById('priceChart').getContext('2d');
             const labels = prices.map(price => new Date(price[0]).toLocaleDateString());
             const data = prices.map(price => price[1]);
@@ -696,28 +662,12 @@
                                     type: 'line',
                                     mode: 'horizontal',
                                     scaleID: 'y',
-                                    value: ath,
-                                    borderColor: '#ef4444',
-                                    borderWidth: 2,
-                                    borderDash: [5, 5],
-                                    label: {
-                                        content: 'ATH',
-                                        enabled: true,
-                                        position: 'end',
-                                        backgroundColor: '#ef4444',
-                                        color: '#fff',
-                                    },
-                                },
-                                line2: {
-                                    type: 'line',
-                                    mode: 'horizontal',
-                                    scaleID: 'y',
-                                    value: atl,
+                                    value: calculateAverage(data),
                                     borderColor: '#10b981',
                                     borderWidth: 2,
                                     borderDash: [5, 5],
                                     label: {
-                                        content: 'ATL',
+                                        content: 'Average Price',
                                         enabled: true,
                                         position: 'end',
                                         backgroundColor: '#10b981',
