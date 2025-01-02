@@ -562,13 +562,20 @@
             spinnerDiv.style.display = 'block';
 
             try {
-                const startTimestamp = new Date(startDate).getTime() / 1000;
-                const endTimestamp = new Date(endDate).getTime() / 1000;
+                const startTimestamp = Math.floor(new Date(startDate).getTime() / 1000);
+                const endTimestamp = Math.floor(new Date(endDate).getTime() / 1000);
                 const url = `https://api.coingecko.com/api/v3/coins/${tokenId}/market_chart/range?vs_currency=usd&from=${startTimestamp}&to=${endTimestamp}`;
+
+                console.log("Fetching data from:", url); // Debug: Stampa l'URL della richiesta
+
                 const response = await fetch(url);
-                if (!response.ok) throw new Error("Error fetching data");
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
 
                 const data = await response.json();
+                console.log("API Response:", data); // Debug: Stampa i dati ricevuti dall'API
+
                 const result = calculateFlows(data.prices, data.total_volumes);
 
                 resultsDiv.innerHTML = 
@@ -583,6 +590,7 @@
                 renderChart(data.prices);
             } catch (error) {
                 resultsDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+                console.error("Error fetching data:", error); // Debug: Stampa l'errore completo
             } finally {
                 spinnerDiv.style.display = 'none';
             }
@@ -607,6 +615,11 @@
         }
 
         function renderChart(prices) {
+            if (!prices || prices.length === 0) {
+                console.error("No price data available to render the chart.");
+                return;
+            }
+
             const ctx = document.getElementById('priceChart').getContext('2d');
             const labels = prices.map(price => new Date(price[0]).toLocaleDateString());
             const data = prices.map(price => price[1]);
@@ -633,8 +646,8 @@
                             zoom: {
                                 wheel: {
                                     enabled: true,
-                                    speed: 0.05, // Riduci ulteriormente la sensibilità dello zoom
-                                    modifierKey: 'ctrl', // Richiede il tasto Ctrl per lo zoom con la rotella
+                                    speed: 0.05,
+                                    modifierKey: 'ctrl',
                                 },
                                 pinch: {
                                     enabled: true,
@@ -644,7 +657,7 @@
                             pan: {
                                 enabled: true,
                                 mode: 'xy',
-                                threshold: 5, // Distanza minima per attivare il pan
+                                threshold: 5,
                             },
                         },
                         annotation: {
@@ -672,9 +685,9 @@
                                 label: function (context) {
                                     let value = context.raw;
                                     if (value > 0 && value < 1) {
-                                        return `Price: ${value.toFixed(10)} USD`; // Formatta con 10 cifre decimali per numeri tra 0 e 1
+                                        return `Price: ${value.toFixed(10)} USD`;
                                     } else {
-                                        return `Price: ${value} USD`; // Lascia invariati gli altri numeri
+                                        return `Price: ${value} USD`;
                                     }
                                 }
                             }
@@ -697,9 +710,9 @@
                             ticks: {
                                 callback: function (value) {
                                     if (value > 0 && value < 1) {
-                                        return value.toFixed(10); // Formatta con 10 cifre decimali per numeri tra 0 e 1
+                                        return value.toFixed(10);
                                     } else {
-                                        return value; // Lascia invariati gli altri numeri
+                                        return value;
                                     }
                                 }
                             }
