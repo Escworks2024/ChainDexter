@@ -165,7 +165,7 @@
         }
 
         /* Risultati */
-        #results {
+        #results, #cryptoDetails {
             margin-top: 24px;
             padding: 20px;
             background-color: #f8fafc;
@@ -173,7 +173,7 @@
             border-radius: 8px;
         }
 
-        body.dark-mode #results {
+        body.dark-mode #results, body.dark-mode #cryptoDetails {
             background-color: #475569;
             border-color: #64748b;
         }
@@ -370,6 +370,7 @@
 
         <div id="spinner">Analyzing...</div>
         <div id="results" class="fade-in"></div>
+        <div id="cryptoDetails" class="fade-in"></div>
         <div id="chartContainer" class="fade-in">
             <canvas id="priceChart"></canvas>
             <button id="resetZoom">Reset Zoom</button>
@@ -550,12 +551,47 @@
             populateDropdown(filteredTokens);
         });
 
+        async function fetchCryptoDetails(tokenId) {
+            try {
+                const url = `https://api.coingecko.com/api/v3/coins/${tokenId}`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Error fetching crypto details");
+
+                const data = await response.json();
+
+                // Debug: Stampa i dati ricevuti dall'API
+                console.log("API Response:", data);
+
+                const ath = data.market_data.ath.usd;
+                const athDate = new Date(data.market_data.ath_date.usd).toLocaleDateString();
+                const currentPrice = data.market_data.current_price.usd;
+                const distanceFromAth = ((currentPrice - ath) / ath * 100).toFixed(2);
+                const atl = data.market_data.atl.usd;
+                const atlDate = new Date(data.market_data.atl_date.usd).toLocaleDateString();
+                const dailyVolume = data.market_data.total_volume.usd;
+
+                return {
+                    ath,
+                    athDate,
+                    currentPrice,
+                    distanceFromAth,
+                    atl,
+                    atlDate,
+                    dailyVolume,
+                };
+            } catch (error) {
+                console.error("Error fetching crypto details:", error);
+                return null;
+            }
+        }
+
         async function fetchData() {
             const tokenId = document.getElementById('tokenSelect').value;
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
             const resultsDiv = document.getElementById('results');
             const spinnerDiv = document.getElementById('spinner');
+            const cryptoDetailsDiv = document.getElementById('cryptoDetails');
 
             if (!tokenId || !startDate || !endDate) {
                 resultsDiv.innerHTML = "<p>Select a cryptocurrency and a valid date range.</p>";
@@ -579,14 +615,27 @@
                 const data = await response.json();
                 const result = calculateFlows(data.prices, data.total_volumes);
 
-                resultsDiv.innerHTML = `
-                    <h2>Results:</h2>
+                resultsDiv.innerHTML = 
+                    `<h2>Results:</h2>
                     <div class="week">
                         <strong>Inflow:</strong> ${formatCurrency(result.inflow)}<br>
                         <strong>Outflow:</strong> ${formatCurrency(result.outflow)}<br>
                         <strong>Net:</strong> ${formatCurrency(result.netto)}
-                    </div>
-                `;
+                    </div>`;
+
+                // Ottieni i dettagli della criptovaluta
+                const cryptoDetails = await fetchCryptoDetails(tokenId);
+                if (cryptoDetails) {
+                    cryptoDetailsDiv.innerHTML = 
+                        `<h2>Crypto Details</h2>
+                        <div class="week">
+                            <strong>ATH (All-Time High):</strong> ${formatCurrency(cryptoDetails.ath)} on ${cryptoDetails.athDate}<br>
+                            <strong>Current Price:</strong> ${formatCurrency(cryptoDetails.currentPrice)}<br>
+                            <strong>Distance from ATH:</strong> ${cryptoDetails.distanceFromAth}%<br>
+                            <strong>ATL (All-Time Low):</strong> ${formatCurrency(cryptoDetails.atl)} on ${cryptoDetails.atlDate}<br>
+                            <strong>Daily Volume:</strong> ${formatCurrency(cryptoDetails.dailyVolume)}
+                        </div>`;
+                }
 
                 // Visualizza il grafico
                 renderChart(data.prices);
@@ -610,6 +659,8 @@
         function formatCurrency(value) {
             if (value > 0 && value < 1) {
                 return value.toFixed(10); // Formatta con 10 cifre decimali per numeri tra 0 e 1
+            } else if (value >= 1000) {
+                return value.toLocaleString(); // Formatta con separatori di migliaia per numeri grandi
             } else {
                 return value.toString(); // Lascia invariati gli altri numeri
             }
