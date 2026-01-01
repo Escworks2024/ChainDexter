@@ -62,24 +62,26 @@
       display:flex; align-items:center; gap:10px;
       font-weight:650; letter-spacing:.2px;
     }
+
+    /* LOGO IMAGE (metti il tuo file qui) */
     .logo{
-      width:34px; height:34px; border-radius: 11px;
-      background:
-        radial-gradient(16px 16px at 30% 30%, rgba(255,255,255,.40), transparent 60%),
-        linear-gradient(135deg, rgba(124,58,237,.85), rgba(34,211,238,.75));
+      width:34px;
+      height:34px;
+      border-radius: 11px;
       border:1px solid rgba(255,255,255,.18);
-      box-shadow: 0 12px 30px rgba(124,58,237,.22);
-      position:relative;
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+      background: rgba(255,255,255,.06);
+      display:flex;
+      align-items:center;
+      justify-content:center;
       overflow:hidden;
+      flex: 0 0 auto;
     }
-    .logo:after{
-      content:"5+1";
-      position:absolute; inset:0;
-      display:grid; place-items:center;
-      font-size:12px; font-weight:750;
-      color:rgba(255,255,255,.92);
-      text-shadow: 0 6px 18px rgba(0,0,0,.45);
-      letter-spacing:.4px;
+    .logo img{
+      width:70%;
+      height:70%;
+      object-fit: contain;
+      display:block;
     }
 
     .navlinks{
@@ -331,6 +333,80 @@
       color: rgba(233,236,242,.86);
     }
 
+    /* RESULTS (proof) */
+    .resultsGrid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
+      margin-top: 12px;
+    }
+    .resultCard{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      border-radius: 18px;
+      padding: 14px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 14px 45px rgba(0,0,0,.35);
+      transition: transform .16s ease, border-color .16s ease, background .16s ease;
+      text-decoration:none;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height: 120px;
+    }
+    .resultCard:hover{
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.07);
+    }
+    .resultTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .resultTitle{
+      font-weight:700;
+      letter-spacing:-.01em;
+      line-height:1.25;
+    }
+    .chip{
+      font-size:11px;
+      font-weight:700;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.86);
+      white-space:nowrap;
+    }
+    .resultMeta{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      color: rgba(233,236,242,.72);
+      font-size:12px;
+      line-height:1.5;
+    }
+    .resultMeta span{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      padding:6px 10px;
+      border-radius: 999px;
+    }
+    .resultCta{
+      margin-top:auto;
+      color: rgba(233,236,242,.86);
+      font-size:13px;
+      font-weight:650;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      opacity:.92;
+    }
+    .resultCta .arrow{ opacity:.85; }
+
     footer{
       margin-top: 26px;
       padding: 18px 6px 0;
@@ -347,13 +423,14 @@
       .hero{ grid-template-columns: 1fr; }
       .grid{ grid-template-columns: 1fr; }
       .extras{ grid-template-columns: 1fr; }
+      .resultsGrid{ grid-template-columns: 1fr; }
       .navlinks{ display:none; }
     }
 </style>
 <div class="wrap">
 <header class="nav">
-<div class="brand">
-<div aria-hidden="true" class="logo">&nbsp;</div>
+<div class="brand"><!-- Cambia src con il tuo file (es: logo-5plus1.png) -->
+<div aria-hidden="true" class="logo"><img alt="5+1 agenzy logo" src="logo-5plus1.png" /></div>
 
 <div>
 <div style="font-size:14px; line-height:1; opacity:.95;">5+1 agenzy</div>
@@ -362,7 +439,7 @@
 </div>
 </div>
 
-<nav aria-label="Sezioni" class="navlinks"><a href="#pacchetti">Pacchetti</a> <a href="#servizi">Servizi aggiuntivi</a> <a href="#promo">Promo</a> <a href="#contatti">Contatti</a></nav>
+<nav aria-label="Sezioni" class="navlinks"><a href="#pacchetti">Pacchetti</a> <a href="#servizi">Servizi aggiuntivi</a> <a href="#promo">Promo</a> <a href="#risultati">Risultati</a> <a href="#contatti">Contatti</a></nav>
 
 <div class="cta"><a class="btn" href="#pacchetti">Vedi pacchetti</a> <a class="btn primary" href="#contatti">Richiedi preventivo</a></div>
 </header>
@@ -430,7 +507,6 @@ pulita e potente.</h1>
 	<li>1 post fotografico a settimana</li>
 	<li>Copy ottimizzato per social (testo, didascalia e hashtag)</li>
 	<li>1 revisione per contenuto</li>
-	<li>Strategia di lancio social</li>
 </ul>
 
 <div class="cardActions"><a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20sono%20interessato%20al%20PACCHETTO%20START.%20Possiamo%20sentirci%3F" rel="noopener" target="_blank">Attiva Start</a> <a class="btn" href="#servizi">Aggiungi servizi</a></div>
@@ -452,7 +528,6 @@ pulita e potente.</h1>
 	<li>Pubblicazione su 1 piattaforma (Instagram o TikTok a scelta)</li>
 	<li>Mini report mensile (reach &ndash; interazioni &ndash; contenuti migliori)</li>
 	<li>2 revisioni per contenuto</li>
-	<li>Strategia di crescita social</li>
 </ul>
 
 <div class="divider">&nbsp;</div>
@@ -516,6 +591,73 @@ pulita e potente.</h1>
 <div style="margin-top:14px;"><a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20vorrei%20info%20sulla%20promo%20referral%20(-80%E2%82%AC%20Business)." rel="noopener" target="_blank">Richiedi info</a></div>
 </div>
 </section>
+<!-- RISULTATI -->
+
+<section class="glassPanel" id="risultati" style="margin-top:16px;">
+<div class="sectionTitle" style="margin:0 0 10px; padding:0;">
+<h2>Alcuni risultati</h2>
+
+<p>Esempi reali di contenuti pubblicati (sostituisci i link).</p>
+</div>
+
+<div aria-label="Risultati / Case study" class="resultsGrid"><!-- CARD 1 -->
+<div class="resultTop">
+<div class="resultTitle"><a class="resultCard" href="https://example.com/link-video-1" rel="noopener" target="_blank">Ristorante &bull; Reel virale</a></div>
+<a class="resultCard" href="https://example.com/link-video-1" rel="noopener" target="_blank"><span class="chip">Instagram</span> </a></div>
+
+<div class="resultMeta"><a class="resultCard" href="https://example.com/link-video-1" rel="noopener" target="_blank"><span>+120k views</span> <span>+1.2k follower</span> </a></div>
+
+<div class="resultCta"><a class="resultCard" href="https://example.com/link-video-1" rel="noopener" target="_blank">Guarda video <span class="arrow">&rarr;</span></a></div>
+<!-- CARD 2 -->
+
+<div class="resultTop">
+<div class="resultTitle"><a class="resultCard" href="https://example.com/link-video-2" rel="noopener" target="_blank">Barber &bull; Format &ldquo;prima/dopo&rdquo;</a></div>
+<a class="resultCard" href="https://example.com/link-video-2" rel="noopener" target="_blank"><span class="chip">TikTok</span> </a></div>
+
+<div class="resultMeta"><a class="resultCard" href="https://example.com/link-video-2" rel="noopener" target="_blank"><span>+80k views</span> <span>+240 lead</span> </a></div>
+
+<div class="resultCta"><a class="resultCard" href="https://example.com/link-video-2" rel="noopener" target="_blank">Guarda video <span class="arrow">&rarr;</span></a></div>
+<!-- CARD 3 -->
+
+<div class="resultTop">
+<div class="resultTitle"><a class="resultCard" href="https://example.com/link-video-3" rel="noopener" target="_blank">Palestra &bull; Shorts performance</a></div>
+<a class="resultCard" href="https://example.com/link-video-3" rel="noopener" target="_blank"><span class="chip">YouTube</span> </a></div>
+
+<div class="resultMeta"><a class="resultCard" href="https://example.com/link-video-3" rel="noopener" target="_blank"><span>+55k views</span> <span>CTR in crescita</span> </a></div>
+
+<div class="resultCta"><a class="resultCard" href="https://example.com/link-video-3" rel="noopener" target="_blank">Guarda video <span class="arrow">&rarr;</span></a></div>
+<!-- CARD 4 -->
+
+<div class="resultTop">
+<div class="resultTitle"><a class="resultCard" href="https://example.com/link-video-4" rel="noopener" target="_blank">E-commerce &bull; Promo prodotto</a></div>
+<a class="resultCard" href="https://example.com/link-video-4" rel="noopener" target="_blank"><span class="chip">Instagram</span> </a></div>
+
+<div class="resultMeta"><a class="resultCard" href="https://example.com/link-video-4" rel="noopener" target="_blank"><span>ROAS &uarr;</span> <span>+ vendite</span> </a></div>
+
+<div class="resultCta"><a class="resultCard" href="https://example.com/link-video-4" rel="noopener" target="_blank">Guarda video <span class="arrow">&rarr;</span></a></div>
+<!-- CARD 5 -->
+
+<div class="resultTop">
+<div class="resultTitle"><a class="resultCard" href="https://example.com/link-video-5" rel="noopener" target="_blank">Centro estetico &bull; UGC</a></div>
+<a class="resultCard" href="https://example.com/link-video-5" rel="noopener" target="_blank"><span class="chip">TikTok</span> </a></div>
+
+<div class="resultMeta"><a class="resultCard" href="https://example.com/link-video-5" rel="noopener" target="_blank"><span>+40k views</span> <span>DM &uarr;</span> </a></div>
+
+<div class="resultCta"><a class="resultCard" href="https://example.com/link-video-5" rel="noopener" target="_blank">Guarda video <span class="arrow">&rarr;</span></a></div>
+<!-- CARD 6 -->
+
+<div class="resultTop">
+<div class="resultTitle"><a class="resultCard" href="https://example.com/link-video-6" rel="noopener" target="_blank">Brand &bull; Storytelling</a></div>
+<a class="resultCard" href="https://example.com/link-video-6" rel="noopener" target="_blank"><span class="chip">Instagram</span> </a></div>
+
+<div class="resultMeta"><a class="resultCard" href="https://example.com/link-video-6" rel="noopener" target="_blank"><span>Retention &uarr;</span> <span>Commenti &uarr;</span> </a></div>
+
+<div class="resultCta"><a class="resultCard" href="https://example.com/link-video-6" rel="noopener" target="_blank">Guarda video <span class="arrow">&rarr;</span></a></div>
+</div>
+
+<div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;"><a class="btn" href="#contatti">Vuoi risultati simili?</a> <a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20ho%20visto%20i%20risultati%20in%20landing%20e%20vorrei%20capire%20quale%20pacchetto%20fa%20per%20me." rel="noopener" target="_blank">Scrivici su WhatsApp</a></div>
+</section>
+<!-- CONTATTI -->
 
 <section class="glassPanel" id="contatti" style="margin-top:16px;">
 <div class="sectionTitle" style="margin:0 0 10px; padding:0;">
@@ -546,7 +688,7 @@ pulita e potente.</h1>
 </section>
 
 <footer>
-<div>&copy; 5+1 agenzy &mdash; Marketing Agency&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; P.IVA&nbsp;</div>
+<div>&copy; 5+1 agenzy &mdash; Marketing Agency</div>
 
 <div style="opacity:.8;">Minimal landing &middot; Apple-like glass UI</div>
 </footer>
