@@ -39,30 +39,39 @@
       content:"";
       position:fixed; inset:0;
       pointer-events:none;
+      z-index:0;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
       mix-blend-mode:overlay;
       opacity:.12;
     }
-body:after{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:0;
 
-  /* Logo in semi trasparenza */
-  background-image: url("https://console.yorapp.it/personalfiles/2367/image/ChatGPT%20Image%201%20gen%202026%2C%2022_58_33.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: min(900px, 92vw);
-
-  opacity: .08;                 /* <-- aumenta/diminuisci trasparenza */
-  filter: blur(0px);            /* <-- se lo vuoi più soft: 1px/2px */
-  transform: translateZ(0);
-}
+    /* watermark logo */
+    body:after{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:0; /* dietro al contenuto */
+      background-image: url("https://console.yorapp.it/personalfiles/2367/image/ChatGPT%20Image%201%20gen%202026%2C%2022_58_33.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: min(900px, 92vw);
+      opacity: .08;
+      filter: blur(0px);
+      transform: translateZ(0);
+    }
 
     a{color:inherit}
-    .wrap{max-width:var(--max); margin:0 auto; padding:28px 20px 70px}
+
+    /* ✅ IMPORTANTISSIMO: tutto il sito sopra i layer di background */
+    .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:28px 20px 70px;
+      position:relative;
+      z-index:2;
+    }
+
     .nav{
       display:flex; align-items:center; justify-content:space-between;
       gap:16px;
@@ -80,7 +89,7 @@ body:after{
       font-weight:650; letter-spacing:.2px;
     }
 
-    /* LOGO IMAGE (metti il tuo file qui) */
+    /* LOGO IMAGE (metti il file nella stessa cartella e chiamalo logo-5plus1.png) */
     .logo{
       width:34px;
       height:34px;
@@ -446,8 +455,8 @@ body:after{
 </style>
 <div class="wrap">
 <header class="nav">
-<div class="brand"><!-- Cambia src con il tuo file (es: logo-5plus1.png) -->
-<div aria-hidden="true" class="logo"><img alt="5+1 agenzy logo" src="logo-5plus1.png" /></div>
+<div class="brand">
+<div class="logo"><img alt="" src="https://console.yorapp.it/personalfiles/2367/image/ChatGPT%20Image%201%20gen%202026%2C%2022_58_33.png" style="width: 30px; height: 30px;" /></div>
 
 <div>
 <div style="font-size:14px; line-height:1; opacity:.95;">5+1 agenzy</div>
@@ -524,6 +533,7 @@ pulita e potente.</h1>
 	<li>1 post fotografico a settimana</li>
 	<li>Copy ottimizzato per social (testo, didascalia e hashtag)</li>
 	<li>1 revisione per contenuto</li>
+	<li>Pianificazione social di lancio</li>
 </ul>
 
 <div class="cardActions"><a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20sono%20interessato%20al%20PACCHETTO%20START.%20Possiamo%20sentirci%3F" rel="noopener" target="_blank">Attiva Start</a> <a class="btn" href="#servizi">Aggiungi servizi</a></div>
@@ -545,6 +555,7 @@ pulita e potente.</h1>
 	<li>Pubblicazione su 1 piattaforma (Instagram o TikTok a scelta)</li>
 	<li>Mini report mensile (reach &ndash; interazioni &ndash; contenuti migliori)</li>
 	<li>2 revisioni per contenuto</li>
+	<li>Pianificazione social di crescita&nbsp;</li>
 </ul>
 
 <div class="divider">&nbsp;</div>
@@ -608,7 +619,6 @@ pulita e potente.</h1>
 <div style="margin-top:14px;"><a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20vorrei%20info%20sulla%20promo%20referral%20(-80%E2%82%AC%20Business)." rel="noopener" target="_blank">Richiedi info</a></div>
 </div>
 </section>
-<!-- RISULTATI -->
 
 <section class="glassPanel" id="risultati" style="margin-top:16px;">
 <div class="sectionTitle" style="margin:0 0 10px; padding:0;">
@@ -617,15 +627,14 @@ pulita e potente.</h1>
 <p>Esempi reali di contenuti pubblicati (sostituisci i link).</p>
 </div>
 
-<div aria-label="Risultati / Case study" class="resultsGrid"><!-- CARD 1 -->
+<div aria-label="Risultati / Case study" class="resultsGrid">
 <div class="resultTop">
-<div class="resultTitle"><a class="resultCard" href="https://example.com/link-video-1" rel="noopener" target="_blank">Ristorante &bull; Reel virale</a></div>
-<a class="resultCard" href="https://example.com/link-video-1" rel="noopener" target="_blank"><span class="chip">Instagram</span> </a></div>
+<div class="resultTitle"><a class="resultCard" href="https://www.instagram.com/reel/DEo9sEwO2lL/" rel="noopener" target="_blank">Arena Softair &bull; Reel virale</a></div>
+<a class="resultCard" href="https://www.instagram.com/reel/DEo9sEwO2lL/" rel="noopener" target="_blank"><span class="chip">Instagram</span> </a></div>
 
-<div class="resultMeta"><a class="resultCard" href="https://example.com/link-video-1" rel="noopener" target="_blank"><span>+120k views</span> <span>+1.2k follower</span> </a></div>
+<div class="resultMeta"><a class="resultCard" href="https://www.instagram.com/reel/DEo9sEwO2lL/" rel="noopener" target="_blank"><span>+13,9k views</span> <span>+1.2k follower</span> </a></div>
 
-<div class="resultCta"><a class="resultCard" href="https://example.com/link-video-1" rel="noopener" target="_blank">Guarda video <span class="arrow">&rarr;</span></a></div>
-<!-- CARD 2 -->
+<div class="resultCta"><a class="resultCard" href="https://www.instagram.com/reel/DEo9sEwO2lL/" rel="noopener" target="_blank">Guarda video <span class="arrow">&rarr;</span></a></div>
 
 <div class="resultTop">
 <div class="resultTitle"><a class="resultCard" href="https://example.com/link-video-2" rel="noopener" target="_blank">Barber &bull; Format &ldquo;prima/dopo&rdquo;</a></div>
@@ -634,7 +643,6 @@ pulita e potente.</h1>
 <div class="resultMeta"><a class="resultCard" href="https://example.com/link-video-2" rel="noopener" target="_blank"><span>+80k views</span> <span>+240 lead</span> </a></div>
 
 <div class="resultCta"><a class="resultCard" href="https://example.com/link-video-2" rel="noopener" target="_blank">Guarda video <span class="arrow">&rarr;</span></a></div>
-<!-- CARD 3 -->
 
 <div class="resultTop">
 <div class="resultTitle"><a class="resultCard" href="https://example.com/link-video-3" rel="noopener" target="_blank">Palestra &bull; Shorts performance</a></div>
@@ -643,7 +651,6 @@ pulita e potente.</h1>
 <div class="resultMeta"><a class="resultCard" href="https://example.com/link-video-3" rel="noopener" target="_blank"><span>+55k views</span> <span>CTR in crescita</span> </a></div>
 
 <div class="resultCta"><a class="resultCard" href="https://example.com/link-video-3" rel="noopener" target="_blank">Guarda video <span class="arrow">&rarr;</span></a></div>
-<!-- CARD 4 -->
 
 <div class="resultTop">
 <div class="resultTitle"><a class="resultCard" href="https://example.com/link-video-4" rel="noopener" target="_blank">E-commerce &bull; Promo prodotto</a></div>
@@ -652,7 +659,6 @@ pulita e potente.</h1>
 <div class="resultMeta"><a class="resultCard" href="https://example.com/link-video-4" rel="noopener" target="_blank"><span>ROAS &uarr;</span> <span>+ vendite</span> </a></div>
 
 <div class="resultCta"><a class="resultCard" href="https://example.com/link-video-4" rel="noopener" target="_blank">Guarda video <span class="arrow">&rarr;</span></a></div>
-<!-- CARD 5 -->
 
 <div class="resultTop">
 <div class="resultTitle"><a class="resultCard" href="https://example.com/link-video-5" rel="noopener" target="_blank">Centro estetico &bull; UGC</a></div>
@@ -661,7 +667,6 @@ pulita e potente.</h1>
 <div class="resultMeta"><a class="resultCard" href="https://example.com/link-video-5" rel="noopener" target="_blank"><span>+40k views</span> <span>DM &uarr;</span> </a></div>
 
 <div class="resultCta"><a class="resultCard" href="https://example.com/link-video-5" rel="noopener" target="_blank">Guarda video <span class="arrow">&rarr;</span></a></div>
-<!-- CARD 6 -->
 
 <div class="resultTop">
 <div class="resultTitle"><a class="resultCard" href="https://example.com/link-video-6" rel="noopener" target="_blank">Brand &bull; Storytelling</a></div>
@@ -674,7 +679,6 @@ pulita e potente.</h1>
 
 <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;"><a class="btn" href="#contatti">Vuoi risultati simili?</a> <a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20ho%20visto%20i%20risultati%20in%20landing%20e%20vorrei%20capire%20quale%20pacchetto%20fa%20per%20me." rel="noopener" target="_blank">Scrivici su WhatsApp</a></div>
 </section>
-<!-- CONTATTI -->
 
 <section class="glassPanel" id="contatti" style="margin-top:16px;">
 <div class="sectionTitle" style="margin:0 0 10px; padding:0;">
