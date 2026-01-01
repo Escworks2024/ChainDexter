@@ -43,6 +43,23 @@
       mix-blend-mode:overlay;
       opacity:.12;
     }
+body:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+
+  /* Logo in semi trasparenza */
+  background-image: url("https://console.yorapp.it/personalfiles/2367/image/ChatGPT%20Image%201%20gen%202026%2C%2022_58_33.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: min(900px, 92vw);
+
+  opacity: .08;                 /* <-- aumenta/diminuisci trasparenza */
+  filter: blur(0px);            /* <-- se lo vuoi più soft: 1px/2px */
+  transform: translateZ(0);
+}
 
     a{color:inherit}
     .wrap{max-width:var(--max); margin:0 auto; padding:28px 20px 70px}
