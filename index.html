@@ -1,785 +1,584 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Analysis</title>
-    <style>
-        /* Stili combinati */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>5+1 agenzy — Marketing Agency</title>
+  <meta name="description" content="5+1 agenzy: pacchetti social per crescere con contenuti, strategia e performance." />
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: #f8fafc;
-            color: #1e293b;
-            line-height: 1.6;
-            padding: 20px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-        body.dark-mode {
-            background-color: #1e293b;
-            color: #f8fafc;
-        }
+  <style>
+    :root{
+      --bg0:#05070d;
+      --fg:#e9ecf2;
+      --muted:rgba(233,236,242,.72);
+      --card:rgba(255,255,255,.08);
+      --card2:rgba(255,255,255,.06);
+      --stroke:rgba(255,255,255,.14);
+      --shadow: 0 20px 60px rgba(0,0,0,.55);
+      --radius: 22px;
+      --radius2: 28px;
+      --max: 1120px;
+      --accentA: #7c3aed;
+      --accentB: #22d3ee;
+      --accentC: #a3ff7a;
+    }
 
-        h1 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            text-align: center;
-        }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--fg);
+      background:
+        radial-gradient(1200px 800px at 20% 15%, rgba(124,58,237,.35), transparent 60%),
+        radial-gradient(900px 700px at 85% 20%, rgba(34,211,238,.25), transparent 60%),
+        radial-gradient(900px 700px at 60% 95%, rgba(163,255,122,.18), transparent 60%),
+        linear-gradient(180deg, #05070d 0%, #070a12 40%, #05070d 100%);
+      overflow-x:hidden;
+    }
 
-        p {
-            font-size: 16px;
-            color: #64748b;
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 24px;
-        }
+    /* subtle noise */
+    body:before{
+      content:"";
+      position:fixed; inset:0;
+      pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+      mix-blend-mode:overlay;
+      opacity:.12;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 16px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            padding: 24px;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            flex: 1;
-        }
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:28px 20px 70px}
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:16px;
+      padding:14px 16px;
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.04);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 999px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      position:sticky; top:16px; z-index:50;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:650; letter-spacing:.2px;
+    }
+    .logo{
+      width:34px; height:34px; border-radius: 11px;
+      background:
+        radial-gradient(16px 16px at 30% 30%, rgba(255,255,255,.40), transparent 60%),
+        linear-gradient(135deg, rgba(124,58,237,.85), rgba(34,211,238,.75));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: 0 12px 30px rgba(124,58,237,.22);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo:after{
+      content:"5+1";
+      position:absolute; inset:0;
+      display:grid; place-items:center;
+      font-size:12px; font-weight:750;
+      color:rgba(255,255,255,.92);
+      text-shadow: 0 6px 18px rgba(0,0,0,.45);
+      letter-spacing:.4px;
+    }
 
-        body.dark-mode .container {
-            background-color: #334155;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        }
+    .navlinks{
+      display:flex; gap:16px; align-items:center;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .navlinks a{ text-decoration:none; padding:8px 10px; border-radius: 999px; }
+    .navlinks a:hover{ background: rgba(255,255,255,.06); color: var(--fg); }
 
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
+    .cta{
+      display:flex; gap:10px; align-items:center;
+    }
 
-        .language-select {
-            padding: 8px;
-            font-size: 14px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            background-color: #fff;
-            color: #1e293b;
-            transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-        }
+    .btn{
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.06);
+      color:var(--fg);
+      padding:10px 14px;
+      border-radius: 999px;
+      text-decoration:none;
+      font-weight:600;
+      font-size:14px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      will-change: transform;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.22); }
+    .btn.primary{
+      border:1px solid rgba(255,255,255,.22);
+      background: linear-gradient(135deg, rgba(124,58,237,.95), rgba(34,211,238,.80));
+      box-shadow: 0 18px 50px rgba(124,58,237,.22);
+    }
+    .btn.primary:hover{ transform: translateY(-1px) scale(1.01); }
 
-        body.dark-mode .language-select {
-            background-color: #475569;
-            border-color: #64748b;
-            color: #f8fafc;
-        }
+    .hero{
+      padding:54px 6px 26px;
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      font-size:13px;
+      color: rgba(255,255,255,.82);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      padding:8px 12px;
+      border-radius: 999px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: linear-gradient(135deg, var(--accentB), var(--accentA));
+      box-shadow: 0 0 0 4px rgba(34,211,238,.12);
+    }
 
-        .dark-mode-button {
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #1e293b;
-            background-color: #e2e8f0;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
+    h1{
+      margin:16px 0 10px;
+      font-size: clamp(34px, 4vw, 52px);
+      line-height:1.05;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      margin:0 0 18px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height:1.6;
+      max-width: 56ch;
+    }
+    .heroActions{display:flex; gap:12px; flex-wrap:wrap}
 
-        body.dark-mode .dark-mode-button {
-            background-color: #475569;
-            color: #f8fafc;
-        }
+    .glassPanel{
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border-radius: var(--radius2);
+      padding:18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .sideTitle{
+      font-weight:700;
+      margin:2px 0 8px;
+      letter-spacing:-.01em;
+    }
+    .sideList{
+      margin:0; padding-left: 18px;
+      color: rgba(233,236,242,.80);
+      font-size: 14px;
+      line-height:1.7;
+    }
+    .kpi{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:14px;
+    }
+    .kpi .tile{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      border-radius: 16px;
+      padding:12px;
+    }
+    .kpi .big{font-size:18px; font-weight:750}
+    .kpi .small{font-size:12px; color:rgba(233,236,242,.72)}
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+    .sectionTitle{
+      margin: 28px 6px 14px;
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap:16px;
+    }
+    .sectionTitle h2{
+      margin:0;
+      font-size: 20px;
+      letter-spacing:-.01em;
+    }
+    .sectionTitle p{
+      margin:0;
+      color: var(--muted);
+      font-size: 14px;
+    }
 
-        label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: #475569;
-            margin-bottom: 8px;
-        }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:16px;
+      margin-top: 12px;
+    }
 
-        body.dark-mode label {
-            color: #cbd5e1;
-        }
+    .card{
+      position:relative;
+      border-radius: var(--radius);
+      padding: 18px;
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.04));
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 18px 55px rgba(0,0,0,.45);
+      overflow:hidden;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      min-height: 320px;
+    }
+    .card:hover{
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,.22);
+      background: linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.05));
+    }
+    .card:before{
+      content:"";
+      position:absolute; inset:-120px -120px auto auto;
+      width:260px; height:260px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.25), transparent 55%);
+      opacity:.22;
+      transform: rotate(12deg);
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size: 12px;
+      font-weight:650;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.88);
+      position:relative;
+      z-index:1;
+    }
+    .price{
+      font-size: 28px;
+      font-weight: 780;
+      letter-spacing:-.02em;
+      margin: 14px 0 6px;
+      position:relative;
+      z-index:1;
+    }
+    .per{
+      font-size: 13px;
+      color: rgba(233,236,242,.72);
+      font-weight: 600;
+      margin-left:6px;
+    }
+    .desc{
+      margin: 4px 0 12px;
+      color: rgba(233,236,242,.78);
+      font-size: 14px;
+      line-height:1.5;
+      position:relative;
+      z-index:1;
+    }
+    .list{
+      margin: 0;
+      padding-left: 18px;
+      color: rgba(233,236,242,.84);
+      font-size: 14px;
+      line-height:1.7;
+      position:relative;
+      z-index:1;
+    }
+    .divider{
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+      margin: 14px 0;
+      position:relative;
+      z-index:1;
+    }
+    .cardActions{
+      display:flex;
+      gap:10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+      position:relative;
+      z-index:1;
+    }
 
-        select, input[type="date"], input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            font-size: 14px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            background-color: #fff;
-            color: #1e293b;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
+    .hint{
+      margin:16px 6px 0;
+      color: rgba(233,236,242,.68);
+      font-size: 12px;
+      line-height:1.6;
+    }
 
-        body.dark-mode select, body.dark-mode input[type="date"], body.dark-mode input[type="text"] {
-            background-color: #475569;
-            border-color: #64748b;
-            color: #f8fafc;
-        }
+    .extras{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 16px;
+    }
+    .pillgrid{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top: 10px;
+    }
+    .pill{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: rgba(233,236,242,.86);
+    }
 
-        select:focus, input[type="date"]:focus, input[type="text"]:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-            outline: none;
-        }
+    footer{
+      margin-top: 26px;
+      padding: 18px 6px 0;
+      color: rgba(233,236,242,.62);
+      font-size: 12px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
 
-        button {
-            width: 100%;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #fff;
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        #results {
-            margin-top: 24px;
-            padding: 20px;
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-        }
-
-        body.dark-mode #results {
-            background-color: #475569;
-            border-color: #64748b;
-        }
-
-        .week {
-            margin-bottom: 16px;
-            padding: 16px;
-            background-color: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        body.dark-mode .week {
-            background-color: #334155;
-            border-color: #64748b;
-        }
-
-        .week strong {
-            color: #1e293b;
-        }
-
-        body.dark-mode .week strong {
-            color: #f8fafc;
-        }
-
-        #loading, #spinner {
-            display: none;
-            font-size: 14px;
-            color: #64748b;
-            text-align: center;
-            margin-top: 16px;
-        }
-
-        body.dark-mode #loading, body.dark-mode #spinner {
-            color: #cbd5e1;
-        }
-
-        #error {
-            display: none;
-            font-size: 14px;
-            color: #ef4444;
-            text-align: center;
-            margin-top: 16px;
-        }
-
-        #chartContainer {
-            margin-top: 24px;
-            width: 100%;
-            background-color: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 16px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        body.dark-mode #chartContainer {
-            background-color: #334155;
-            border-color: #64748b;
-        }
-
-        canvas {
-            width: 100% !important;
-            height: 400px !important;
-        }
-
-        #resetZoom {
-            margin-top: 10px;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #fff;
-            background-color: #ef4444;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #resetZoom:hover {
-            background-color: #dc2626;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            background-color: #fff;
-            border-top: 1px solid #e2e8f0;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-
-        body.dark-mode footer {
-            background-color: #334155;
-            border-color: #64748b;
-        }
-
-        footer a {
-            display: inline-block;
-            text-decoration: none;
-            color: #3b82f6;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        body.dark-mode footer a {
-            color: #60a5fa;
-        }
-
-        footer img {
-            width: 48px;
-            height: 48px;
-            vertical-align: middle;
-            margin-right: 8px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 24px;
-            }
-
-            p {
-                font-size: 14px;
-            }
-
-            .container {
-                padding: 16px;
-            }
-        }
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    /* responsive */
+    @media (max-width: 980px){
+      .hero{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: 1fr; }
+      .extras{ grid-template-columns: 1fr; }
+      .navlinks{ display:none; }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="top-bar">
-        <select class="language-select" id="languageSelect">
-            <option value="en">English</option>
-            <option value="it">Italiano</option>
-            <option value="es">Español</option>
-            <option value="fr">Français</option>
-        </select>
-        <button class="dark-mode-button" id="darkModeButton">Dark Mode</button>
-    </div>
+  <div class="wrap">
 
-    <div class="container">
-        <h1 id="title">Crypto Analysis</h1>
-        <p id="description">
-            <strong>Inflow</strong>: Volume of trades associated with a price increase.<br>
-            <strong>Outflow</strong>: Volume of trades associated with a price decrease.<br>
-            <strong>Net</strong>: Difference between inflow and outflow.
+    <header class="nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div style="font-size:14px; line-height:1; opacity:.95;">5+1 agenzy</div>
+          <div style="font-size:12px; line-height:1.2; color:rgba(233,236,242,.68);">Marketing Agency</div>
+        </div>
+      </div>
+
+      <nav class="navlinks" aria-label="Sezioni">
+        <a href="#pacchetti">Pacchetti</a>
+        <a href="#servizi">Servizi aggiuntivi</a>
+        <a href="#promo">Promo</a>
+        <a href="#contatti">Contatti</a>
+      </nav>
+
+      <div class="cta">
+        <a class="btn" href="#pacchetti">Vedi pacchetti</a>
+        <a class="btn primary" href="#contatti">Richiedi preventivo</a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <span class="badge"><span class="dot"></span>Contenuti + Strategia + Risultati</span>
+        <h1>La tua presenza social, <br/>pulita e potente.</h1>
+        <p class="sub">
+          Con <strong>5+1 agenzy</strong> scegli un pacchetto chiaro, una produzione costante e una strategia semplice da eseguire.
+          Perfetto per attività locali, brand e aziende che vogliono crescere sul serio.
         </p>
-
-        <div class="form-group">
-            <label for="searchToken" id="searchLabel">Search cryptocurrency:</label>
-            <input type="text" id="searchToken" placeholder="Type to search...">
+        <div class="heroActions">
+          <a class="btn primary" href="#contatti">Parliamone su WhatsApp</a>
+          <a class="btn" href="#pacchetti">Scopri i pacchetti</a>
         </div>
-        
-        <div class="form-group">
-            <label for="tokenSelect" id="selectLabel">Select a cryptocurrency:</label>
-            <select id="tokenSelect">
-                <option value="" disabled selected>Loading...</option>
-            </select>
-            <div id="loading">Loading cryptocurrencies...</div>
-            <div id="error"></div>
+        <p class="hint">* Stile minimal, flusso semplice, contenuti ottimizzati per Reel / TikTok / Shorts.</p>
+      </div>
+
+      <aside class="glassPanel">
+        <div class="sideTitle">Come lavoriamo</div>
+        <ul class="sideList">
+          <li>Produzione contenuti ricorrente</li>
+          <li>Copy ottimizzato e coerente</li>
+          <li>Revisioni incluse per qualità</li>
+          <li>Report & miglioramento continuo</li>
+        </ul>
+        <div class="kpi">
+          <div class="tile">
+            <div class="big">7/7</div>
+            <div class="small">Approccio costante</div>
+          </div>
+          <div class="tile">
+            <div class="big">📈</div>
+            <div class="small">Focus risultati</div>
+          </div>
         </div>
+      </aside>
+    </section>
 
-        <div class="form-group">
-            <label for="startDate" id="startDateLabel">Select start date:</label>
-            <input type="date" id="startDate" />
-        </div>
-
-        <div class="form-group">
-            <label for="endDate" id="endDateLabel">Select end date:</label>
-            <input type="date" id="endDate" />
-        </div>
-
-        <button onclick="fetchData()" id="analyzeButton">Analyze</button>
-
-        <div id="spinner">Analyzing...</div>
-        <div id="results" class="fade-in"></div>
-        <div id="chartContainer" class="fade-in">
-            <canvas id="priceChart"></canvas>
-            <button id="resetZoom">Reset Zoom</button>
-        </div>
-
-        <div id="cryptoDetails" class="details"></div>
+    <div class="sectionTitle" id="pacchetti">
+      <div>
+        <h2>Pacchetti</h2>
+        <p>Scegli il livello giusto. Upgrade sempre possibile.</p>
+      </div>
+      <p style="color:rgba(233,236,242,.62); font-size:12px; margin:0;">Prezzi mensili (IVA escl./incl. secondo accordi)</p>
     </div>
 
-    <!-- Footer -->
+    <section class="grid">
+      <!-- START -->
+      <article class="card" aria-label="Pacchetto Start">
+        <span class="tag">🔹 PACCHETTO START</span>
+        <div class="price">179€ <span class="per">/ mese</span></div>
+        <p class="desc">Ideale per attività locali o brand che iniziano</p>
+
+        <div class="divider"></div>
+
+        <ul class="list">
+          <li>2 video brevi a settimana (Reel / TikTok / Shorts)</li>
+          <li>1 post fotografico a settimana</li>
+          <li>Copy ottimizzato per social (testo, didascalia e hashtag)</li>
+          <li>1 revisione per contenuto</li>
+        </ul>
+
+        <div class="cardActions">
+          <a class="btn primary" href="#contatti">Attiva Start</a>
+          <a class="btn" href="#servizi">Aggiungi servizi</a>
+        </div>
+      </article>
+
+      <!-- GROWTH -->
+      <article class="card" aria-label="Pacchetto Growth">
+        <span class="tag">🔸 PACCHETTO GROWTH</span>
+        <div class="price">349€ <span class="per">/ mese</span></div>
+        <p class="desc">Pacchetto equilibrato per attività che vogliono risultati concreti</p>
+
+        <div class="divider"></div>
+
+        <ul class="list">
+          <li>3 video a settimana (adattati per Reel / TikTok / Shorts)</li>
+          <li>2 post fotografici a settimana</li>
+          <li>Copywriting strategico</li>
+          <li>Pubblicazione su 1 piattaforma (Instagram o TikTok a scelta)</li>
+          <li>Mini report mensile (reach – interazioni – contenuti migliori)</li>
+          <li>2 revisioni per contenuto</li>
+        </ul>
+
+        <div class="divider"></div>
+        <p class="desc" style="margin-bottom:0;"><strong>Bonus:</strong> Consulenza contenuti (trend, format, angolazioni)</p>
+
+        <div class="cardActions">
+          <a class="btn primary" href="#contatti">Attiva Growth</a>
+          <a class="btn" href="#servizi">Aggiungi servizi</a>
+        </div>
+      </article>
+
+      <!-- BUSINESS -->
+      <article class="card" aria-label="Pacchetto Business Avanzato">
+        <span class="tag">🔥 PACCHETTO BUSINESS / AVANZATO</span>
+        <div class="price">549€ <span class="per">/ mese</span></div>
+        <p class="desc">Pensato per chi vuole crescere rapidamente in multi-piattaforma</p>
+
+        <div class="divider"></div>
+
+        <p class="desc" style="margin-bottom:8px;"><strong>🎯 Gestione Social Completa</strong></p>
+        <ul class="list">
+          <li>Creazione account (se assenti)</li>
+          <li>3–4 video a settimana</li>
+          <li>2 post fotografici a settimana</li>
+          <li>Copywriting avanzato orientato alla conversione (testo, didascalia e hashtag)</li>
+          <li>Pubblicazione su Instagram, TikTok, YouTube Shorts, Facebook</li>
+        </ul>
+
+        <div class="divider"></div>
+
+        <p class="desc" style="margin-bottom:8px;"><strong>📊 Strategia & Engagement</strong></p>
+        <ul class="list">
+          <li>Pianificazione editoriale strutturata</li>
+          <li>Creazione stories interattive (min. 2 a settimana)</li>
+          <li>Ottimizzazione continua dei contenuti</li>
+          <li>Report mensile dettagliato</li>
+          <li>2 revisioni per contenuto</li>
+        </ul>
+
+        <div class="cardActions">
+          <a class="btn primary" href="#contatti">Attiva Business</a>
+          <a class="btn" href="#promo">Vedi promo</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="extras" id="servizi">
+      <div class="glassPanel">
+        <div class="sideTitle">➕ Servizi aggiuntivi (su richiesta)</div>
+        <div style="color:rgba(233,236,242,.70); font-size:13px; line-height:1.6;">
+          Prezzo da concordare — perfetti per spingere performance, conversioni e automazione.
+        </div>
+
+        <div class="pillgrid" aria-label="Lista servizi aggiuntivi">
+          <span class="pill">Campagne pubblicitarie Meta / TikTok (ADV)</span>
+          <span class="pill">Shooting foto / video</span>
+          <span class="pill">QR Code (menu, pagamenti, gestionali)</span>
+          <span class="pill">Landing page</span>
+          <span class="pill">Automazioni WhatsApp / email</span>
+          <span class="pill">Gestione DM e customer care</span>
+          <span class="pill">Email Marketing (creazione email promozionali)</span>
+          <span class="pill">Invio su database fornito dal cliente</span>
+        </div>
+      </div>
+
+      <div class="glassPanel" id="promo">
+        <div class="sideTitle">🎁 Promo attiva — Referral</div>
+        <div style="margin-top:8px; color:rgba(233,236,242,.84); line-height:1.6; font-size:14px;">
+          <strong>👉 Porta un amico</strong><br/>
+          • <strong>–80€</strong> sul Pacchetto Business<br/>
+          • valido dal <strong>secondo mese</strong>
+        </div>
+
+        <div style="margin-top:14px;">
+          <a class="btn primary" href="#contatti">Richiedi info</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="glassPanel" id="contatti" style="margin-top:16px;">
+      <div class="sectionTitle" style="margin:0 0 10px; padding:0;">
+        <h2>Contatti</h2>
+        <p>Risposta rapida: scrivici e ti guidiamo noi.</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+        <div style="border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.05); border-radius:18px; padding:14px;">
+          <div style="font-weight:700;">WhatsApp</div>
+          <div style="color:rgba(233,236,242,.72); font-size:13px; margin-top:6px;">
+            Inserisci qui il tuo link wa.me
+          </div>
+          <div style="margin-top:10px;">
+            <a class="btn primary" href="https://wa.me/0000000000" target="_blank" rel="noopener">Apri WhatsApp</a>
+            <a class="btn" href="mailto:hello@5plus1agenzy.com">Email</a>
+          </div>
+        </div>
+
+        <div style="border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.05); border-radius:18px; padding:14px;">
+          <div style="font-weight:700;">Brief veloce</div>
+          <div style="color:rgba(233,236,242,.72); font-size:13px; margin-top:6px; line-height:1.6;">
+            1) Settore<br/>
+            2) Obiettivo (vendite / lead / brand)<br/>
+            3) Canale preferito (IG / TikTok / multi)
+          </div>
+          <div style="margin-top:10px;">
+            <a class="btn" href="#pacchetti">Torna ai pacchetti</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <footer>
-        <a href="https://your-sol-donation-address-here" target="_blank" rel="noopener noreferrer">
-            <img src="https://i.imgur.com/960npj0.png" alt="Donate SOL">
-            DONATE SOL
-        </a>
+      <div>© <span id="year"></span> 5+1 agenzy — Marketing Agency</div>
+      <div style="opacity:.8;">Minimal landing · Apple-like glass UI</div>
     </footer>
+  </div>
 
-    <script>
-        const CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24 ore in millisecondi
-        let allTokens = []; // Memorizza i token caricati
-        let priceChart = null; // Memorizza l'istanza del grafico
-
-        // Traduzioni
-        const translations = {
-            en: {
-                title: "Crypto Analysis",
-                description: "<strong>Inflow</strong>: Volume of trades associated with a price increase.<br><strong>Outflow</strong>: Volume of trades associated with a price decrease.<br><strong>Net</strong>: Difference between inflow and outflow.",
-                searchLabel: "Search cryptocurrency:",
-                selectLabel: "Select a cryptocurrency:",
-                startDateLabel: "Select start date:",
-                endDateLabel: "Select end date:",
-                analyzeButton: "Analyze",
-                loading: "Loading cryptocurrencies...",
-                spinner: "Analyzing...",
-                error: "Error:",
-                results: "Results:",
-                inflow: "Inflow:",
-                outflow: "Outflow:",
-                net: "Net:",
-            },
-            it: {
-                title: "Analisi Criptovalute",
-                description: "<strong>Inflow</strong>: Volume di scambi associato a un aumento di prezzo.<br><strong>Outflow</strong>: Volume di scambi associato a una diminuzione di prezzo.<br><strong>Netto</strong>: Differenza tra inflow e outflow.",
-                searchLabel: "Cerca criptovaluta:",
-                selectLabel: "Seleziona una criptovaluta:",
-                startDateLabel: "Seleziona la data di inizio:",
-                endDateLabel: "Seleziona la data di fine:",
-                analyzeButton: "Analizza",
-                loading: "Caricamento delle criptovalute...",
-                spinner: "Analisi in corso...",
-                error: "Errore:",
-                results: "Risultati:",
-                inflow: "Inflow:",
-                outflow: "Outflow:",
-                net: "Netto:",
-            },
-            es: {
-                title: "Análisis de Criptomonedas",
-                description: "<strong>Inflow</strong>: Volumen de operaciones asociado a un aumento de precio.<br><strong>Outflow</strong>: Volumen de operaciones asociado a una disminución de precio.<br><strong>Neto</strong>: Diferencia entre inflow y outflow.",
-                searchLabel: "Buscar criptomoneda:",
-                selectLabel: "Selecciona una criptomoneda:",
-                startDateLabel: "Selecciona la fecha de inicio:",
-                endDateLabel: "Selecciona la fecha de fin:",
-                analyzeButton: "Analizar",
-                loading: "Cargando criptomonedas...",
-                spinner: "Analizando...",
-                error: "Error:",
-                results: "Resultados:",
-                inflow: "Inflow:",
-                outflow: "Outflow:",
-                net: "Neto:",
-            },
-            fr: {
-                title: "Analyse de Cryptomonnaies",
-                description: "<strong>Inflow</strong>: Volume d'échanges associé à une augmentation de prix.<br><strong>Outflow</strong>: Volume d'échanges associé à une diminution de prix.<br><strong>Net</strong>: Différence entre inflow et outflow.",
-                searchLabel: "Rechercher une cryptomonnaie:",
-                selectLabel: "Sélectionnez une cryptomonnaie:",
-                startDateLabel: "Sélectionnez la date de début:",
-                endDateLabel: "Sélectionnez la date de fin:",
-                analyzeButton: "Analyser",
-                loading: "Chargement des cryptomonnaies...",
-                spinner: "Analyse en cours...",
-                error: "Erreur:",
-                results: "Résultats:",
-                inflow: "Inflow:",
-                outflow: "Outflow:",
-                net: "Net:",
-            },
-        };
-
-        // Imposta la lingua
-        function setLanguage(lang) {
-            const translation = translations[lang];
-            document.getElementById("title").innerHTML = translation.title;
-            document.getElementById("description").innerHTML = translation.description;
-            document.getElementById("searchLabel").innerText = translation.searchLabel;
-            document.getElementById("selectLabel").innerText = translation.selectLabel;
-            document.getElementById("startDateLabel").innerText = translation.startDateLabel;
-            document.getElementById("endDateLabel").innerText = translation.endDateLabel;
-            document.getElementById("analyzeButton").innerText = translation.analyzeButton;
-            document.getElementById("loading").innerText = translation.loading;
-            document.getElementById("spinner").innerText = translation.spinner;
-            document.getElementById("error").innerText = translation.error;
-        }
-
-        // Cambia lingua
-        document.getElementById("languageSelect").addEventListener("change", function () {
-            const lang = this.value;
-            setLanguage(lang);
-        });
-
-        // Modalità scura
-        document.getElementById("darkModeButton").addEventListener("click", function () {
-            document.body.classList.toggle("dark-mode");
-            this.innerText = document.body.classList.contains("dark-mode") ? "Light Mode" : "Dark Mode";
-        });
-
-        // Caricamento della lista delle criptovalute con cache
-        async function loadTokens() {
-            const tokenSelect = document.getElementById('tokenSelect');
-            const loadingDiv = document.getElementById('loading');
-            const errorDiv = document.getElementById('error');
-            tokenSelect.innerHTML = '<option value="" disabled selected>Loading...</option>';
-            loadingDiv.style.display = 'block';
-            errorDiv.style.display = 'none';
-
-            try {
-                const perPage = 250;
-                const totalPages = 4;
-
-                for (let page = 1; page <= totalPages; page++) {
-                    const tokensUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${perPage}&page=${page}`;
-                    const response = await fetch(tokensUrl);
-                    if (!response.ok) throw new Error(`Errore nella pagina ${page}`);
-                    const tokens = await response.json();
-                    allTokens = allTokens.concat(tokens);
-                    await new Promise(resolve => setTimeout(resolve, 1000)); // Ritardo per evitare rate limiting
-                }
-
-                // Aggiungi manualmente "The Balkan Dwarf"
-                const balkanDwarf = {
-                    id: "the-balkan-dwarf",
-                    name: "The Balkan Dwarf",
-                    symbol: "KEK",
-                    image: "https://assets.coingecko.com/coins/images/36401/large/KEK.png?1696537358",
-                    current_price: 0.000000000000000001, // Prezzo fittizio
-                    market_cap: 0, // Market cap fittizio
-                    total_volume: 0, // Volume fittizio
-                };
-                allTokens.push(balkanDwarf);
-
-                populateDropdown(allTokens);
-                console.log(allTokens); // Stampa l'array per verifica
-            } catch (error) {
-                tokenSelect.innerHTML = '<option value="" disabled selected>Error loading data</option>';
-                errorDiv.textContent = `Error: ${error.message}`;
-                errorDiv.style.display = 'block';
-            } finally {
-                loadingDiv.style.display = 'none';
-            }
-        }
-
-        function populateDropdown(tokens) {
-            const tokenSelect = document.getElementById('tokenSelect');
-            tokenSelect.innerHTML = '<option value="" disabled selected>Select a cryptocurrency</option>';
-            tokens.forEach(token => {
-                const option = document.createElement('option');
-                option.value = token.id;
-                option.textContent = `${token.name} (${token.symbol.toUpperCase()})`;
-                tokenSelect.appendChild(option);
-            });
-        }
-
-        // Filtra le criptovalute
-        document.getElementById('searchToken').addEventListener('input', function () {
-            const query = this.value.toLowerCase();
-            const filteredTokens = allTokens.filter(token => 
-                token.name.toLowerCase().includes(query) || 
-                token.symbol.toLowerCase().includes(query)
-            );
-            populateDropdown(filteredTokens);
-        });
-
-        async function fetchData() {
-            const tokenId = document.getElementById('tokenSelect').value;
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
-            const resultsDiv = document.getElementById('results');
-            const spinnerDiv = document.getElementById('spinner');
-
-            if (!tokenId || !startDate || !endDate) {
-                resultsDiv.innerHTML = "<p>Select a cryptocurrency and a valid date range.</p>";
-                return;
-            }
-
-            if (new Date(startDate) >= new Date(endDate)) {
-                resultsDiv.innerHTML = "<p>The start date must be before the end date.</p>";
-                return;
-            }
-
-            spinnerDiv.style.display = 'block';
-
-            try {
-                const startTimestamp = Math.floor(new Date(startDate).getTime() / 1000);
-                const endTimestamp = Math.floor(new Date(endDate).getTime() / 1000);
-                const url = `https://api.coingecko.com/api/v3/coins/${tokenId}/market_chart/range?vs_currency=usd&from=${startTimestamp}&to=${endTimestamp}`;
-
-                console.log("Fetching data from:", url); // Debug: Stampa l'URL della richiesta
-
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                console.log("API Response:", data); // Debug: Stampa i dati ricevuti dall'API
-
-                const result = calculateFlows(data.prices, data.total_volumes);
-
-                resultsDiv.innerHTML = 
-                    `<h2>Results:</h2>
-                    <div class="week">
-                        <strong>Inflow:</strong> ${formatCurrency(result.inflow)}<br>
-                        <strong>Outflow:</strong> ${formatCurrency(result.outflow)}<br>
-                        <strong>Net:</strong> ${formatCurrency(result.netto)}
-                    </div>`;
-
-                // Visualizza il grafico
-                renderChart(data.prices);
-            } catch (error) {
-                resultsDiv.innerHTML = `<p>Error: ${error.message}</p>`;
-                console.error("Error fetching data:", error); // Debug: Stampa l'errore completo
-            } finally {
-                spinnerDiv.style.display = 'none';
-            }
-        }
-
-        function calculateFlows(prices, volumes) {
-            let inflow = 0, outflow = 0;
-            for (let i = 1; i < prices.length; i++) {
-                const volume = volumes[i][1];
-                if (prices[i][1] > prices[i - 1][1]) inflow += volume * prices[i][1];
-                else outflow += volume * prices[i][1];
-            }
-            return { inflow, outflow, netto: inflow - outflow };
-        }
-
-        function formatCurrency(value) {
-            if (value > 0 && value < 1) {
-                return value.toFixed(10); // Formatta con 10 cifre decimali per numeri tra 0 e 1
-            } else {
-                return value.toString(); // Lascia invariati gli altri numeri
-            }
-        }
-
-        function renderChart(prices) {
-            if (!prices || prices.length === 0) {
-                console.error("No price data available to render the chart.");
-                return;
-            }
-
-            const ctx = document.getElementById('priceChart').getContext('2d');
-            const labels = prices.map(price => new Date(price[0]).toLocaleDateString());
-            const data = prices.map(price => price[1]);
-
-            if (priceChart) {
-                priceChart.destroy(); // Rimuove il grafico esistente
-            }
-
-            priceChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Price (USD)',
-                        data: data,
-                        borderColor: '#3b82f6',
-                        fill: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        zoom: {
-                            zoom: {
-                                wheel: {
-                                    enabled: true,
-                                    speed: 0.05,
-                                    modifierKey: 'ctrl',
-                                },
-                                pinch: {
-                                    enabled: true,
-                                },
-                                mode: 'xy',
-                            },
-                            pan: {
-                                enabled: true,
-                                mode: 'xy',
-                                threshold: 5,
-                            },
-                        },
-                        annotation: {
-                            annotations: {
-                                line1: {
-                                    type: 'line',
-                                    mode: 'horizontal',
-                                    scaleID: 'y',
-                                    value: calculateAverage(data),
-                                    borderColor: '#10b981',
-                                    borderWidth: 2,
-                                    borderDash: [5, 5],
-                                    label: {
-                                        content: 'Average Price',
-                                        enabled: true,
-                                        position: 'end',
-                                        backgroundColor: '#10b981',
-                                        color: '#fff',
-                                    },
-                                },
-                            },
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function (context) {
-                                    let value = context.raw;
-                                    if (value > 0 && value < 1) {
-                                        return `Price: ${value.toFixed(10)} USD`;
-                                    } else {
-                                        return `Price: ${value} USD`;
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            display: true,
-                            title: {
-                                display: true,
-                                text: 'Date'
-                            }
-                        },
-                        y: {
-                            display: true,
-                            title: {
-                                display: true,
-                                text: 'Price (USD)'
-                            },
-                            ticks: {
-                                callback: function (value) {
-                                    if (value > 0 && value < 1) {
-                                        return value.toFixed(10);
-                                    } else {
-                                        return value;
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    interaction: {
-                        mode: 'nearest',
-                        intersect: false,
-                    },
-                }
-            });
-
-            // Aggiungi il pulsante di reset zoom
-            document.getElementById('resetZoom').addEventListener('click', () => {
-                if (priceChart) {
-                    priceChart.resetZoom();
-                }
-            });
-        }
-
-        // Calcola la media dei prezzi
-        function calculateAverage(data) {
-            const sum = data.reduce((acc, val) => acc + val, 0);
-            return sum / data.length;
-        }
-
-        // Recupera i dettagli della criptovaluta
-        async function fetchCryptoDetails(tokenId) {
-            const cryptoDetailsDiv = document.getElementById('cryptoDetails');
-            try {
-                const response = await fetch(`https://api.coingecko.com/api/v3/coins/${tokenId}`);
-                if (!response.ok) throw new Error("Error fetching crypto details");
-                const data = await response.json();
-
-                const ath = data.market_data.ath.usd;
-                const athDate = new Date(data.market_data.ath_date.usd).toLocaleDateString();
-                const currentPrice = data.market_data.current_price.usd;
-                const distanceFromAth = ((currentPrice - ath) / ath * 100).toFixed(2);
-                const atl = data.market_data.atl.usd;
-                const atlDate = new Date(data.market_data.atl_date.usd).toLocaleDateString();
-                const dailyVolume = data.market_data.total_volume.usd;
-
-                cryptoDetailsDiv.innerHTML = `
-                    <div><strong>ATH (All-Time High):</strong> $${ath.toLocaleString()} on ${athDate}</div>
-                    <div><strong>Current Price:</strong> $${currentPrice.toLocaleString()}</div>
-                    <div><strong>Distance from ATH:</strong> ${distanceFromAth}%</div>
-                    <div><strong>ATL (All-Time Low):</strong> $${atl.toLocaleString()} on ${atlDate}</div>
-                    <div><strong>Daily Volume:</strong> $${dailyVolume.toLocaleString()}</div>
-                `;
-            } catch (error) {
-                cryptoDetailsDiv.innerHTML = `<div style="color: red;">Error: ${error.message}</div>`;
-                console.error("Error fetching crypto details:", error);
-            }
-        }
-
-        // Event listener per la selezione della criptovaluta
-        document.getElementById('tokenSelect').addEventListener('change', function () {
-            const tokenId = this.value;
-            if (tokenId) {
-                fetchCryptoDetails(tokenId);
-            }
-        });
-
-        window.onload = () => {
-            loadTokens();
-            setLanguage("en"); // Imposta la lingua predefinita su inglese
-        };
-    </script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
