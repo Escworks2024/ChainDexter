@@ -1,10 +1,17 @@
-<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
-<title></title>
-<meta name="description" content="5+1 agenzy: pacchetti social per crescere con contenuti, strategia e performance." />
-<link href="https://fonts.googleapis.com" rel="preconnect" />
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
-<style type="text/css">:root{
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>5+1 agenzy — Marketing Agency</title>
+  <meta name="description" content="5+1 agenzy: pacchetti social per crescere con contenuti, strategia e performance." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
       --bg0:#05070d;
       --fg:#e9ecf2;
       --muted:rgba(233,236,242,.72);
@@ -22,6 +29,7 @@
 
     *{box-sizing:border-box}
     html,body{height:100%}
+
     body{
       margin:0;
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -63,7 +71,7 @@
 
     a{color:inherit}
 
-    /* ✅ IMPORTANTISSIMO: tutto il sito sopra i layer di background */
+    /* contenuto sopra i layer */
     .wrap{
       max-width:var(--max);
       margin:0 auto;
@@ -84,12 +92,12 @@
       box-shadow: 0 10px 30px rgba(0,0,0,.35);
       position:sticky; top:16px; z-index:50;
     }
+
     .brand{
       display:flex; align-items:center; gap:10px;
       font-weight:650; letter-spacing:.2px;
     }
 
-    /* LOGO IMAGE (metti il file nella stessa cartella e chiamalo logo-5plus1.png) */
     .logo{
       width:34px;
       height:34px;
@@ -118,9 +126,7 @@
     .navlinks a{ text-decoration:none; padding:8px 10px; border-radius: 999px; }
     .navlinks a:hover{ background: rgba(255,255,255,.06); color: var(--fg); }
 
-    .cta{
-      display:flex; gap:10px; align-items:center;
-    }
+    .cta{ display:flex; gap:10px; align-items:center; }
 
     .btn{
       border:1px solid rgba(255,255,255,.16);
@@ -140,6 +146,7 @@
       justify-content:center;
       gap:8px;
       line-height:1;
+      white-space:nowrap;
     }
     .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.22); }
     .btn.primary{
@@ -156,6 +163,7 @@
       gap: 24px;
       align-items: start;
     }
+
     .badge{
       display:inline-flex; align-items:center; gap:8px;
       font-size:13px;
@@ -179,6 +187,7 @@
       line-height:1.05;
       letter-spacing:-.02em;
     }
+
     .sub{
       margin:0 0 18px;
       color: var(--muted);
@@ -197,6 +206,7 @@
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
     }
+
     .sideTitle{
       font-weight:700;
       margin:2px 0 8px;
@@ -208,6 +218,7 @@
       font-size: 14px;
       line-height:1.7;
     }
+
     .kpi{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -272,6 +283,7 @@
       opacity:.22;
       transform: rotate(12deg);
     }
+
     .tag{
       display:inline-flex;
       align-items:center;
@@ -286,6 +298,7 @@
       position:relative;
       z-index:1;
     }
+
     .price{
       font-size: 28px;
       font-weight: 780;
@@ -332,7 +345,6 @@
       position:relative;
       z-index:1;
     }
-
     .hint{
       margin:16px 6px 0;
       color: rgba(233,236,242,.68);
@@ -359,18 +371,19 @@
       color: rgba(233,236,242,.86);
     }
 
-    /* RESULTS (proof) */
+    /* RESULTS – clean layout */
     .resultsGrid{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
       gap:12px;
       margin-top: 12px;
     }
+
     .resultCard{
       border:1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.05);
       border-radius: 18px;
-      padding: 14px;
+      padding: 12px;
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       box-shadow: 0 14px 45px rgba(0,0,0,.35);
@@ -379,13 +392,29 @@
       display:flex;
       flex-direction:column;
       gap:10px;
-      min-height: 120px;
+      overflow:hidden;
     }
     .resultCard:hover{
       transform: translateY(-2px);
       border-color: rgba(255,255,255,.22);
       background: rgba(255,255,255,.07);
     }
+
+    .resultThumb{
+      width:100%;
+      aspect-ratio: 9 / 16;
+      border-radius: 14px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+    }
+    .resultThumb img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+    }
+
     .resultTop{
       display:flex;
       justify-content:space-between;
@@ -407,9 +436,10 @@
       color: rgba(255,255,255,.86);
       white-space:nowrap;
     }
+
     .resultMeta{
       display:flex;
-      gap:10px;
+      gap:8px;
       flex-wrap:wrap;
       color: rgba(233,236,242,.72);
       font-size:12px;
@@ -421,6 +451,7 @@
       padding:6px 10px;
       border-radius: 999px;
     }
+
     .resultCta{
       margin-top:auto;
       color: rgba(233,236,242,.86);
@@ -452,284 +483,306 @@
       .resultsGrid{ grid-template-columns: 1fr; }
       .navlinks{ display:none; }
     }
-</style>
-<div class="wrap">
-<header class="nav">
-<div class="brand">
-<div class="logo"><img alt="" src="https://console.yorapp.it/personalfiles/2367/image/ChatGPT%20Image%201%20gen%202026%2C%2022_58_33.png" style="width: 30px; height: 30px;" /></div>
-
-<div>
-<div style="font-size:14px; line-height:1; opacity:.95;">5+1 agenzy</div>
-
-<div style="font-size:12px; line-height:1.2; color:rgba(233,236,242,.68);">Marketing Agency</div>
-</div>
-</div>
-
-<nav aria-label="Sezioni" class="navlinks"><a href="#pacchetti">Pacchetti</a> <a href="#servizi">Servizi aggiuntivi</a> <a href="#promo">Promo</a> <a href="#risultati">Risultati</a> <a href="#contatti">Contatti</a></nav>
-
-<div class="cta"><a class="btn" href="#pacchetti">Vedi pacchetti</a> <a class="btn primary" href="#contatti">Richiedi preventivo</a></div>
-</header>
-
-<section class="hero">
-<div><span class="badge">Contenuti + Strategia + Risultati</span>
-
-<h1>La tua presenza social,<br />
-pulita e potente.</h1>
-
-<p class="sub">Con <strong>5+1 agenzy</strong> scegli un pacchetto chiaro, una produzione costante e una strategia semplice da eseguire. Perfetto per attivit&agrave; locali, brand e aziende che vogliono crescere sul serio.</p>
-
-<div class="heroActions"><a class="btn primary" href="https://wa.me/393756953048" rel="noopener" target="_blank">Parliamone su WhatsApp</a> <a class="btn" href="#pacchetti">Scopri i pacchetti</a></div>
-
-<p class="hint">* Stile minimal, flusso semplice, contenuti ottimizzati per Reel / TikTok / Shorts.</p>
-</div>
-
-<aside class="glassPanel">
-<div class="sideTitle">Come lavoriamo</div>
-
-<ul class="sideList">
-	<li>Produzione contenuti ricorrente</li>
-	<li>Copy ottimizzato e coerente</li>
-	<li>Revisioni incluse per qualit&agrave;</li>
-	<li>Report &amp; miglioramento continuo</li>
-</ul>
-
-<div class="kpi">
-<div class="tile">
-<div class="big">7/7</div>
-
-<div class="small">Approccio costante</div>
-</div>
-
-<div class="tile">
-<div class="big">📈</div>
-
-<div class="small">Focus risultati</div>
-</div>
-</div>
-</aside>
-</section>
-
-<div class="sectionTitle" id="pacchetti">
-<div>
-<h2>Pacchetti</h2>
-
-<p>Scegli il livello giusto. Upgrade sempre possibile.</p>
-</div>
-
-<p style="color:rgba(233,236,242,.62); font-size:12px; margin:0;">Prezzi mensili (IVA incl.)</p>
-</div>
-
-<section class="grid"><!-- START -->
-<article aria-label="Pacchetto Start" class="card"><span class="tag">🔹 PACCHETTO START</span>
-
-<div class="price">179&euro; <span class="per">/ mese</span></div>
-
-<p class="desc">Ideale per attivit&agrave; locali o brand che iniziano</p>
-
-<div class="divider">&nbsp;</div>
-
-<ul class="list">
-	<li>2 video brevi a settimana (Reel / TikTok / Shorts)</li>
-	<li>1 post fotografico a settimana</li>
-	<li>Copy ottimizzato per social (testo, didascalia e hashtag)</li>
-	<li>1 revisione per contenuto</li>
-	<li>Pianificazione social di lancio</li>
-</ul>
-
-<div class="cardActions"><a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20sono%20interessato%20al%20PACCHETTO%20START.%20Possiamo%20sentirci%3F" rel="noopener" target="_blank">Attiva Start</a> <a class="btn" href="#servizi">Aggiungi servizi</a></div>
-</article>
-<!-- GROWTH -->
-
-<article aria-label="Pacchetto Growth" class="card"><span class="tag">🔸 PACCHETTO GROWTH</span>
-
-<div class="price">349&euro; <span class="per">/ mese</span></div>
-
-<p class="desc">Pacchetto equilibrato per attivit&agrave; che vogliono risultati concreti</p>
-
-<div class="divider">&nbsp;</div>
-
-<ul class="list">
-	<li>3 video a settimana (adattati per Reel / TikTok / Shorts)</li>
-	<li>2 post fotografici a settimana</li>
-	<li>Copywriting strategico</li>
-	<li>Pubblicazione su 1 piattaforma (Instagram o TikTok a scelta)</li>
-	<li>Mini report mensile (reach &ndash; interazioni &ndash; contenuti migliori)</li>
-	<li>2 revisioni per contenuto</li>
-	<li>Pianificazione social di crescita&nbsp;</li>
-</ul>
-
-<div class="divider">&nbsp;</div>
-
-<p class="desc" style="margin-bottom:0;"><strong>Bonus:</strong> Consulenza contenuti (trend, format, angolazioni)</p>
-
-<div class="cardActions"><a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20sono%20interessato%20al%20PACCHETTO%20GROWTH.%20Vorrei%20info%20e%20tempistiche." rel="noopener" target="_blank">Attiva Growth</a> <a class="btn" href="#servizi">Aggiungi servizi</a></div>
-</article>
-<!-- BUSINESS -->
-
-<article aria-label="Pacchetto Business Avanzato" class="card"><span class="tag">🔥 PACCHETTO BUSINESS / AVANZATO</span>
-
-<div class="price">549&euro; <span class="per">/ mese</span></div>
-
-<p class="desc">Pensato per chi vuole crescere rapidamente in multi-piattaforma</p>
-
-<div class="divider">&nbsp;</div>
-
-<p class="desc" style="margin-bottom:8px;"><strong>🎯 Gestione Social Completa</strong></p>
-
-<ul class="list">
-	<li>Creazione account (se assenti)</li>
-	<li>3&ndash;4 video a settimana</li>
-	<li>2 post fotografici a settimana</li>
-	<li>Copywriting avanzato orientato alla conversione (testo, didascalia e hashtag)</li>
-	<li>Pubblicazione su Instagram, TikTok, YouTube Shorts, Facebook</li>
-</ul>
-
-<div class="divider">&nbsp;</div>
-
-<p class="desc" style="margin-bottom:8px;"><strong>📊 Strategia &amp; Engagement</strong></p>
-
-<ul class="list">
-	<li>Pianificazione editoriale strutturata</li>
-	<li>Creazione stories interattive (min. 2 a settimana)</li>
-	<li>Ottimizzazione continua dei contenuti</li>
-	<li>Report mensile dettagliato</li>
-	<li>2 revisioni per contenuto</li>
-</ul>
-
-<div class="cardActions"><a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20sono%20interessato%20al%20PACCHETTO%20BUSINESS%20%2F%20AVANZATO.%20Vorrei%20un%20brief%20e%20un%20preventivo." rel="noopener" target="_blank">Attiva Business</a> <a class="btn" href="#promo">Vedi promo</a></div>
-</article>
-</section>
-
-<section class="extras" id="servizi">
-<div class="glassPanel">
-<div class="sideTitle">➕ Servizi aggiuntivi (su richiesta)</div>
-
-<div style="color:rgba(233,236,242,.70); font-size:13px; line-height:1.6;">Prezzo da concordare &mdash; perfetti per spingere performance, conversioni e automazione.</div>
-
-<div aria-label="Lista servizi aggiuntivi" class="pillgrid"><span class="pill">Campagne pubblicitarie Meta / TikTok (ADV)</span> <span class="pill">Shooting foto / video</span> <span class="pill">QR Code (menu, pagamenti, gestionali)</span> <span class="pill">Landing page</span> <span class="pill">Automazioni WhatsApp / email</span> <span class="pill">Gestione DM e customer care</span> <span class="pill">Email Marketing (creazione email promozionali)</span> <span class="pill">Invio su database fornito dal cliente</span></div>
-</div>
-
-<div class="glassPanel" id="promo">
-<div class="sideTitle">🎁 Promo attiva &mdash; Referral</div>
-
-<div style="margin-top:8px; color:rgba(233,236,242,.84); line-height:1.6; font-size:14px;"><strong>👉 Porta un amico</strong><br />
-&bull; <strong>&ndash;80&euro;</strong> sul Pacchetto Business<br />
-&bull; valido dal <strong>secondo mese</strong></div>
-
-<div style="margin-top:14px;"><a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20vorrei%20info%20sulla%20promo%20referral%20(-80%E2%82%AC%20Business)." rel="noopener" target="_blank">Richiedi info</a></div>
-</div>
-</section>
-
-<section class="glassPanel" id="risultati" style="margin-top:16px;">
-<div class="sectionTitle" style="margin:0 0 10px; padding:0;">
-<h2>Alcuni risultati</h2>
-
-<p>Esempi reali di contenuti pubblicati .</p>
-</div>
-
-<div aria-label="Risultati / Case study" class="resultsGrid">
-<div class="resultTop">
-<div class="resultTitle"><a href="https://www.instagram.com/reel/DEo9sEwO2lL/"><img alt="" src="https://console.yorapp.it/personalfiles/2367/image/Screenshot%202026-01-01%20232526.png" style="width: 231px; height: 360px;" /></a>&nbsp;&nbsp;&nbsp;Reel attivit&agrave; sportiva - SOFTAIR&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle"><a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20ho%20visto%20i%20risultati%20in%20landing%20e%20vorrei%20capire%20quale%20pacchetto%20fa%20per%20me." rel="noopener" target="_blank">Scrivici su WhatsApp&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</a><br />
-&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle">&nbsp;</div>
-
-<div class="resultTitle"><a href="https://www.instagram.com/reel/DOtDKECgllg/">Reel attivit&agrave; di pasticceria&nbsp;</a><img alt="" src="https://console.yorapp.it/personalfiles/2367/image/Screenshot%202026-01-02%20165339.png" style="width: 231px; height: 358px;" />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a class="resultCard" href="https://www.tiktok.com/@airsoftshopescworks/video/7422775081039957280" rel="noopener" target="_blank">Reel vendita prodotto - CACCIA<br />
-<img alt="" src="https://console.yorapp.it/personalfiles/2367/image/Screenshot%202026-01-02%20165001.png" style="width: 190px; height: 255px;" /></a></div>
-</div>
-</div>
-
-<div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">&nbsp;</div>
-
-<div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">&nbsp;</div>
-</section>
-
-<section class="glassPanel" id="contatti" style="margin-top:16px;">
-<div class="sectionTitle" style="margin:0 0 10px; padding:0;">
-<p>Risposta rapida: scrivici e ti guidiamo noi.</p>
-</div>
-
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
-<div style="border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.05); border-radius:18px; padding:14px;">
-<div style="font-weight:700;">WhatsApp</div>
-
-<div style="color:rgba(233,236,242,.72); font-size:13px; margin-top:6px;">Scrivici su WhatsApp: <strong>+39 375 695 3048</strong></div>
-
-<div style="margin-top:10px;"><a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20vorrei%20informazioni%20sui%20pacchetti%20marketing" rel="noopener" target="_blank">Apri WhatsApp</a> <a class="btn" href="mailto:hello@5plus1agenzy.com">Email</a></div>
-</div>
-
-<div style="border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.05); border-radius:18px; padding:14px;">
-<div style="font-weight:700;">Brief veloce</div>
-
-<div style="color:rgba(233,236,242,.72); font-size:13px; margin-top:6px; line-height:1.6;">1) Settore<br />
-2) Obiettivo (vendite / lead / brand)<br />
-3) Canale preferito (IG / TikTok / multi)</div>
-
-<div style="margin-top:10px;"><a class="btn" href="#pacchetti">Torna ai pacchetti</a></div>
-</div>
-</div>
-</section>
-
-<footer>
-<div>&copy; 5+1 agenzy &mdash; Marketing Agency</div>
-
-<div style="opacity:.8;">Minimal landing &middot; Apple-like glass UI</div>
-</footer>
-</div>
-<script>
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header class="nav">
+      <div class="brand">
+        <div class="logo">
+          <img alt="5+1 agenzy logo" src="https://console.yorapp.it/personalfiles/2367/image/ChatGPT%20Image%201%20gen%202026%2C%2022_58_33.png">
+        </div>
+        <div>
+          <div style="font-size:14px; line-height:1; opacity:.95;">5+1 agenzy</div>
+          <div style="font-size:12px; line-height:1.2; color:rgba(233,236,242,.68);">Marketing Agency</div>
+        </div>
+      </div>
+
+      <nav class="navlinks" aria-label="Sezioni">
+        <a href="#pacchetti">Pacchetti</a>
+        <a href="#servizi">Servizi aggiuntivi</a>
+        <a href="#promo">Promo</a>
+        <a href="#risultati">Risultati</a>
+        <a href="#contatti">Contatti</a>
+      </nav>
+
+      <div class="cta">
+        <a class="btn" href="#pacchetti">Vedi pacchetti</a>
+        <a class="btn primary" href="#contatti">Richiedi preventivo</a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <span class="badge"><span class="dot"></span>Contenuti + Strategia + Risultati</span>
+        <h1>La tua presenza social,<br>pulita e potente.</h1>
+        <p class="sub">
+          Con <strong>5+1 agenzy</strong> scegli un pacchetto chiaro, una produzione costante e una strategia semplice da eseguire.
+          Perfetto per attività locali, brand e aziende che vogliono crescere sul serio.
+        </p>
+        <div class="heroActions">
+          <a class="btn primary" href="https://wa.me/393756953048" target="_blank" rel="noopener">Parliamone su WhatsApp</a>
+          <a class="btn" href="#pacchetti">Scopri i pacchetti</a>
+        </div>
+        <p class="hint">* Stile minimal, flusso semplice, contenuti ottimizzati per Reel / TikTok / Shorts.</p>
+      </div>
+
+      <aside class="glassPanel">
+        <div class="sideTitle">Come lavoriamo</div>
+        <ul class="sideList">
+          <li>Produzione contenuti ricorrente</li>
+          <li>Copy ottimizzato e coerente</li>
+          <li>Revisioni incluse per qualità</li>
+          <li>Report & miglioramento continuo</li>
+        </ul>
+        <div class="kpi">
+          <div class="tile">
+            <div class="big">7/7</div>
+            <div class="small">Approccio costante</div>
+          </div>
+          <div class="tile">
+            <div class="big">📈</div>
+            <div class="small">Focus risultati</div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <div class="sectionTitle" id="pacchetti">
+      <div>
+        <h2>Pacchetti</h2>
+        <p>Scegli il livello giusto. Upgrade sempre possibile.</p>
+      </div>
+      <p style="color:rgba(233,236,242,.62); font-size:12px; margin:0;">Prezzi mensili (IVA incl.)</p>
+    </div>
+
+    <section class="grid">
+      <!-- START -->
+      <article class="card" aria-label="Pacchetto Start">
+        <span class="tag">🔹 PACCHETTO START</span>
+        <div class="price">179€ <span class="per">/ mese</span></div>
+        <p class="desc">Ideale per attività locali o brand che iniziano</p>
+
+        <div class="divider"></div>
+
+        <ul class="list">
+          <li>2 video brevi a settimana (Reel / TikTok / Shorts)</li>
+          <li>1 post fotografico a settimana</li>
+          <li>Copy ottimizzato per social (testo, didascalia e hashtag)</li>
+          <li>1 revisione per contenuto</li>
+          <li>Pianificazione social di lancio</li>
+        </ul>
+
+        <div class="cardActions">
+          <a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20sono%20interessato%20al%20PACCHETTO%20START.%20Possiamo%20sentirci%3F" target="_blank" rel="noopener">Attiva Start</a>
+          <a class="btn" href="#servizi">Aggiungi servizi</a>
+        </div>
+      </article>
+
+      <!-- GROWTH -->
+      <article class="card" aria-label="Pacchetto Growth">
+        <span class="tag">🔸 PACCHETTO GROWTH</span>
+        <div class="price">349€ <span class="per">/ mese</span></div>
+        <p class="desc">Pacchetto equilibrato per attività che vogliono risultati concreti</p>
+
+        <div class="divider"></div>
+
+        <ul class="list">
+          <li>3 video a settimana (adattati per Reel / TikTok / Shorts)</li>
+          <li>2 post fotografici a settimana</li>
+          <li>Copywriting strategico</li>
+          <li>Pubblicazione su 1 piattaforma (Instagram o TikTok a scelta)</li>
+          <li>Mini report mensile (reach – interazioni – contenuti migliori)</li>
+          <li>2 revisioni per contenuto</li>
+          <li>Pianificazione social di crescita</li>
+        </ul>
+
+        <div class="divider"></div>
+        <p class="desc" style="margin-bottom:0;"><strong>Bonus:</strong> Consulenza contenuti (trend, format, angolazioni)</p>
+
+        <div class="cardActions">
+          <a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20sono%20interessato%20al%20PACCHETTO%20GROWTH.%20Vorrei%20info%20e%20tempistiche." target="_blank" rel="noopener">Attiva Growth</a>
+          <a class="btn" href="#servizi">Aggiungi servizi</a>
+        </div>
+      </article>
+
+      <!-- BUSINESS -->
+      <article class="card" aria-label="Pacchetto Business Avanzato">
+        <span class="tag">🔥 PACCHETTO BUSINESS / AVANZATO</span>
+        <div class="price">549€ <span class="per">/ mese</span></div>
+        <p class="desc">Pensato per chi vuole crescere rapidamente in multi-piattaforma</p>
+
+        <div class="divider"></div>
+
+        <p class="desc" style="margin-bottom:8px;"><strong>🎯 Gestione Social Completa</strong></p>
+        <ul class="list">
+          <li>Creazione account (se assenti)</li>
+          <li>3–4 video a settimana</li>
+          <li>2 post fotografici a settimana</li>
+          <li>Copywriting avanzato orientato alla conversione (testo, didascalia e hashtag)</li>
+          <li>Pubblicazione su Instagram, TikTok, YouTube Shorts, Facebook</li>
+        </ul>
+
+        <div class="divider"></div>
+
+        <p class="desc" style="margin-bottom:8px;"><strong>📊 Strategia & Engagement</strong></p>
+        <ul class="list">
+          <li>Pianificazione editoriale strutturata</li>
+          <li>Creazione stories interattive (min. 2 a settimana)</li>
+          <li>Ottimizzazione continua dei contenuti</li>
+          <li>Report mensile dettagliato</li>
+          <li>2 revisioni per contenuto</li>
+        </ul>
+
+        <div class="cardActions">
+          <a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20sono%20interessato%20al%20PACCHETTO%20BUSINESS%20%2F%20AVANZATO.%20Vorrei%20un%20brief%20e%20un%20preventivo." target="_blank" rel="noopener">Attiva Business</a>
+          <a class="btn" href="#promo">Vedi promo</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="extras" id="servizi">
+      <div class="glassPanel">
+        <div class="sideTitle">➕ Servizi aggiuntivi (su richiesta)</div>
+        <div style="color:rgba(233,236,242,.70); font-size:13px; line-height:1.6;">
+          Prezzo da concordare — perfetti per spingere performance, conversioni e automazione.
+        </div>
+
+        <div class="pillgrid" aria-label="Lista servizi aggiuntivi">
+          <span class="pill">Campagne pubblicitarie Meta / TikTok (ADV)</span>
+          <span class="pill">Shooting foto / video</span>
+          <span class="pill">QR Code (menu, pagamenti, gestionali)</span>
+          <span class="pill">Landing page</span>
+          <span class="pill">Automazioni WhatsApp / email</span>
+          <span class="pill">Gestione DM e customer care</span>
+          <span class="pill">Email Marketing (creazione email promozionali)</span>
+          <span class="pill">Invio su database fornito dal cliente</span>
+        </div>
+      </div>
+
+      <div class="glassPanel" id="promo">
+        <div class="sideTitle">🎁 Promo attiva — Referral</div>
+        <div style="margin-top:8px; color:rgba(233,236,242,.84); line-height:1.6; font-size:14px;">
+          <strong>👉 Porta un amico</strong><br>
+          • <strong>–80€</strong> sul Pacchetto Business<br>
+          • valido dal <strong>secondo mese</strong>
+        </div>
+
+        <div style="margin-top:14px;">
+          <a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20vorrei%20info%20sulla%20promo%20referral%20(-80%E2%82%AC%20Business)." target="_blank" rel="noopener">Richiedi info</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- RISULTATI (fix mobile perfetto) -->
+    <section class="glassPanel" id="risultati" style="margin-top:16px;">
+      <div class="sectionTitle" style="margin:0 0 10px; padding:0;">
+        <h2>Alcuni risultati</h2>
+        <p>Esempi reali di contenuti pubblicati.</p>
+      </div>
+
+      <div class="resultsGrid" aria-label="Risultati / Case study">
+
+        <!-- VIDEO 1 -->
+        <a class="resultCard" href="https://www.instagram.com/reel/DEo9sEwO2lL/" target="_blank" rel="noopener">
+          <div class="resultThumb">
+            <img src="https://console.yorapp.it/personalfiles/2367/image/Screenshot%202026-01-01%20232526.png" alt="Reel attività sportiva - Softair">
+          </div>
+          <div class="resultTop">
+            <div class="resultTitle">Reel attività sportiva • Softair</div>
+            <span class="chip">Instagram</span>
+          </div>
+          <div class="resultMeta">
+            <span>Vertical</span>
+            <span>Reel</span>
+          </div>
+          <div class="resultCta">Guarda video <span class="arrow">→</span></div>
+        </a>
+
+        <!-- VIDEO 2 -->
+        <a class="resultCard" href="https://www.instagram.com/reel/DOtDKECgllg/" target="_blank" rel="noopener">
+          <div class="resultThumb">
+            <img src="https://console.yorapp.it/personalfiles/2367/image/Screenshot%202026-01-02%20165001.png" alt="Reel vendita prodotto - Caccia">
+          </div>
+          <div class="resultTop">
+            <div class="resultTitle">Reel vendita prodotto • Caccia</div>
+            <span class="chip">Instagram</span>
+          </div>
+          <div class="resultMeta">
+            <span>Vertical</span>
+            <span>Promo</span>
+          </div>
+          <div class="resultCta">Guarda video <span class="arrow">→</span></div>
+        </a>
+
+        <!-- TEMPLATE: duplica questo blocco per aggiungere altri video -->
+        <!--
+        <a class="resultCard" href="LINK" target="_blank" rel="noopener">
+          <div class="resultThumb">
+            <img src="IMMAGINE" alt="Titolo">
+          </div>
+          <div class="resultTop">
+            <div class="resultTitle">Titolo</div>
+            <span class="chip">TikTok</span>
+          </div>
+          <div class="resultMeta">
+            <span>Vertical</span><span>UGC</span>
+          </div>
+          <div class="resultCta">Guarda video <span class="arrow">→</span></div>
+        </a>
+        -->
+
+      </div>
+
+      <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="#contatti">Vuoi risultati simili?</a>
+        <a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20ho%20visto%20i%20risultati%20in%20landing%20e%20vorrei%20capire%20quale%20pacchetto%20fa%20per%20me." target="_blank" rel="noopener">Scrivici</a>
+      </div>
+    </section>
+
+    <section class="glassPanel" id="contatti" style="margin-top:16px;">
+      <div class="sectionTitle" style="margin:0 0 10px; padding:0;">
+        <h2>Contatti</h2>
+        <p>Risposta rapida: scrivici e ti guidiamo noi.</p>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:14px;">
+        <div style="border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.05); border-radius:18px; padding:14px;">
+          <div style="font-weight:700;">WhatsApp</div>
+          <div style="color:rgba(233,236,242,.72); font-size:13px; margin-top:6px;">
+            Scrivici su WhatsApp: <strong>+39 375 695 3048</strong>
+          </div>
+          <div style="margin-top:10px;">
+            <a class="btn primary" href="https://wa.me/393756953048?text=Ciao%205%2B1%20agenzy%2C%20vorrei%20informazioni%20sui%20pacchetti%20marketing" target="_blank" rel="noopener">Apri WhatsApp</a>
+            <a class="btn" href="mailto:hello@5plus1agenzy.com">Email</a>
+          </div>
+        </div>
+
+        <div style="border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.05); border-radius:18px; padding:14px;">
+          <div style="font-weight:700;">Brief veloce</div>
+          <div style="color:rgba(233,236,242,.72); font-size:13px; margin-top:6px; line-height:1.6;">
+            1) Settore<br>
+            2) Obiettivo (vendite / lead / brand)<br>
+            3) Canale preferito (IG / TikTok / multi)
+          </div>
+          <div style="margin-top:10px;">
+            <a class="btn" href="#pacchetti">Torna ai pacchetti</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>© <span id="year"></span> 5+1 agenzy — Marketing Agency</div>
+      <div style="opacity:.8;">Minimal landing · Apple-like glass UI</div>
+    </footer>
+
+  </div>
+
+  <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
+</body>
+</html>
